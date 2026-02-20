@@ -7,7 +7,8 @@
     "dev": "nodemon src/index.js",
     "start": "node src/index.js",
     "prisma:migrate": "prisma migrate dev --name init",
-    "prisma:generate": "prisma generate"
+    "prisma:generate": "prisma generate",
+    "build": "echo 'No hay build definido, solo backend JS'"
   },
   "dependencies": {
     "@prisma/client": "^6.0.0",

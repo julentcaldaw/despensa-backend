@@ -165,7 +165,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\pracdes2\\Desktop\\julia\\despensa-backend\\src\\generated\\prisma",
+      "value": "C:\\Users\\pracdes2\\Desktop\\julia\\despensaDAW\\despensaDAW-backend\\src\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -176,10 +176,14 @@ const config = {
         "fromEnvVar": null,
         "value": "windows",
         "native": true
+      },
+      {
+        "fromEnvVar": null,
+        "value": "debian-openssl-3.0.x"
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\pracdes2\\Desktop\\julia\\despensa-backend\\prisma\\schema.prisma",
+    "sourceFilePath": "C:\\Users\\pracdes2\\Desktop\\julia\\despensaDAW\\despensaDAW-backend\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -193,6 +197,7 @@ const config = {
     "db"
   ],
   "activeProvider": "mysql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
@@ -201,8 +206,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"mysql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nenum ingredient_priority {\n  alta\n  media\n  baja\n}\n\nmodel ingredient {\n  id       Int                  @id @default(autoincrement())\n  name     String\n  category ingredient_category?\n  pantry   pantry[]\n}\n\nmodel pantry {\n  id           Int                  @id @default(autoincrement())\n  userId       Int\n  ingredientId Int\n  ingredient   ingredient           @relation(fields: [ingredientId], references: [id], map: \"Pantry_ingredientId_fkey\")\n  user         user                 @relation(fields: [userId], references: [id], map: \"Pantry_userId_fkey\")\n  category     ingredient_category?\n\n  @@index([ingredientId], map: \"Pantry_ingredientId_fkey\")\n  @@index([userId], map: \"Pantry_userId_fkey\")\n}\n\nmodel user {\n  id           Int      @id @default(autoincrement())\n  username     String\n  email        String   @unique(map: \"User_email_key\")\n  password     String\n  refreshToken String?\n  pantry       pantry[]\n}\n\nenum ingredient_category {\n  frutas_verduras\n  carnes_pescados\n  lacteos_huevos\n  despensa_granos\n  condimentos_aceites\n  snacks_extras\n}\n",
-  "inlineSchemaHash": "bf7f485d833d927d1dc1146cde5c8afded4ded03134ef9c5541eebbb33f5cb42",
+  "inlineSchema": "generator client {\n  provider      = \"prisma-client-js\"\n  output        = \"../src/generated/prisma\"\n  binaryTargets = [\"native\", \"debian-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider = \"mysql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nenum ingredient_priority {\n  alta\n  media\n  baja\n}\n\nmodel ingredient {\n  id       Int                  @id @default(autoincrement())\n  name     String\n  category ingredient_category?\n  pantry   pantry[]\n}\n\nmodel pantry {\n  id           Int                  @id @default(autoincrement())\n  userId       Int\n  ingredientId Int\n  ingredient   ingredient           @relation(fields: [ingredientId], references: [id], map: \"Pantry_ingredientId_fkey\")\n  user         user                 @relation(fields: [userId], references: [id], map: \"Pantry_userId_fkey\")\n  category     ingredient_category?\n\n  @@index([ingredientId], map: \"Pantry_ingredientId_fkey\")\n  @@index([userId], map: \"Pantry_userId_fkey\")\n}\n\nmodel user {\n  id           Int      @id @default(autoincrement())\n  username     String\n  email        String   @unique(map: \"User_email_key\")\n  password     String\n  refreshToken String?\n  pantry       pantry[]\n}\n\nenum ingredient_category {\n  frutas_verduras\n  carnes_pescados\n  lacteos_huevos\n  despensa_granos\n  condimentos_aceites\n  snacks_extras\n}\n",
+  "inlineSchemaHash": "c1614ce40b547eb3d4f0940f513a1910e40aa72f0dc882cf692206267ef3a85b",
   "copyEngine": true
 }
 config.dirname = '/'
