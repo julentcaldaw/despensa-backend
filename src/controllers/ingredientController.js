@@ -14,6 +14,7 @@ export const getIngredients = async (req, res) => {
 
 export const addIngredient = async (req, res) => {
   const { name, category } = req.body;
+  console.log('Intentando agregar ingrediente:', { name, category });
   const validCategories = [
     'frutas_verduras',
     'carnes_pescados',
@@ -23,9 +24,11 @@ export const addIngredient = async (req, res) => {
     'snacks_extras'
   ];
   if (!name || typeof name !== 'string' || name.trim() === '') {
+    console.error('Nombre de ingrediente vacío o inválido:', { name });
     return res.status(400).json({ error: 'El nombre del ingrediente no puede estar vacío.' });
   }
   if (!category || !validCategories.includes(category)) {
+    console.error('Categoría inválida:', { category });
     return res.status(400).json({ error: 'La categoría debe ser una de: ' + validCategories.join(', ') });
   }
   try {
@@ -47,6 +50,9 @@ export const addIngredient = async (req, res) => {
           where: { id: existing.id },
           data: updateData
         });
+        console.log('Ingrediente actualizado:', ingredient);
+      } else {
+        console.log('Ingrediente ya existente, sin cambios:', ingredient);
       }
       return res.status(200).json({ id: ingredient.id, name: ingredient.name, category: ingredient.category });
     }
@@ -56,8 +62,10 @@ export const addIngredient = async (req, res) => {
         category: category
       }
     });
+    console.log('Ingrediente creado:', ingredient);
     res.status(201).json({ id: ingredient.id, name: ingredient.name, category: ingredient.category });
   } catch (error) {
+    console.error('Error al agregar ingrediente:', error);
     res.status(500).json({ error: error.message });
   }
 };
