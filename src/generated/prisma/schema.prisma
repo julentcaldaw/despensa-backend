@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum ingredient_priority {
+  alta
+  media
+  baja
+}
+
+model ingredient {
+  id       Int                  @id @default(autoincrement())
+  name     String
+  category ingredient_category?
+  pantry   pantry[]
+}
+
+model pantry {
+  id           Int                  @id @default(autoincrement())
+  userId       Int
+  ingredientId Int
+  ingredient   ingredient           @relation(fields: [ingredientId], references: [id], map: "Pantry_ingredientId_fkey")
+  user         user                 @relation(fields: [userId], references: [id], map: "Pantry_userId_fkey")
+  category     ingredient_category?
+
+  @@index([ingredientId], map: "Pantry_ingredientId_fkey")
+  @@index([userId], map: "Pantry_userId_fkey")
+}
+
+model user {
+  id           Int      @id @default(autoincrement())
+  username     String
+  email        String   @unique(map: "User_email_key")
+  password     String
+  refreshToken String?
+  pantry       pantry[]
+}
+
+enum ingredient_category {
+  frutas_verduras
+  carnes_pescados
+  lacteos_huevos
+  despensa_granos
+  condimentos_aceites
+  snacks_extras
+}
