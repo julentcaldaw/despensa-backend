@@ -18,7 +18,7 @@ const app = express();
 
 app.use(express.json());
 const corsOptions = {
-  origin: 'https://tu-frontend.onrender.com', // Cambia por la URL real de tu frontend
+  origin: 'https://despensa-frontend-dc3k.onrender.com',
   optionsSuccessStatus: 200
 };
 app.use(cors(corsOptions));
