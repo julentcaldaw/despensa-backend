@@ -17,10 +17,11 @@ const app = express();
 
 
 app.use(express.json());
-app.use(cors({
-  origin: 'http://localhost:5050', 
-  credentials: true
-}));
+const corsOptions = {
+  origin: 'https://tu-frontend.onrender.com', // Cambia por la URL real de tu frontend
+  optionsSuccessStatus: 200
+};
+app.use(cors(corsOptions));
 
 
 app.use('/api/users', userRoutes);
