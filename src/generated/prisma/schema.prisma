@@ -5,8 +5,9 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 enum ingredient_priority {
@@ -26,8 +27,8 @@ model pantry {
   id           Int                  @id @default(autoincrement())
   userId       Int
   ingredientId Int
-  ingredient   ingredient           @relation(fields: [ingredientId], references: [id], map: "Pantry_ingredientId_fkey")
-  user         user                 @relation(fields: [userId], references: [id], map: "Pantry_userId_fkey")
+  ingredient   ingredient           @relation(fields: [ingredientId], references: [id], map: "Pantry_ingredientId_rel")
+  user         user                 @relation(fields: [userId], references: [id], map: "Pantry_userId_rel")
   category     ingredient_category?
 
   @@index([ingredientId], map: "Pantry_ingredientId_fkey")

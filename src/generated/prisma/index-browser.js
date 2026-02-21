@@ -147,20 +147,14 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
+exports.Prisma.QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
+};
+
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
-};
-
-exports.Prisma.ingredientOrderByRelevanceFieldEnum = {
-  name: 'name'
-};
-
-exports.Prisma.userOrderByRelevanceFieldEnum = {
-  username: 'username',
-  email: 'email',
-  password: 'password',
-  refreshToken: 'refreshToken'
 };
 exports.ingredient_category = exports.$Enums.ingredient_category = {
   frutas_verduras: 'frutas_verduras',
