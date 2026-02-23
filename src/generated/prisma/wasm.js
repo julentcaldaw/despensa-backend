@@ -114,6 +114,20 @@ exports.Prisma.UserScalarFieldEnum = {
   refreshToken: 'refreshToken'
 };
 
+exports.Prisma.ShopScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  userId: 'userId'
+};
+
+exports.Prisma.ShoppingListScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  ingredientId: 'ingredientId',
+  shopId: 'shopId',
+  bought: 'bought'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -146,7 +160,9 @@ exports.ingredient_category = exports.$Enums.ingredient_category = {
 exports.Prisma.ModelName = {
   ingredient: 'ingredient',
   pantry: 'pantry',
-  user: 'user'
+  user: 'user',
+  shop: 'shop',
+  shoppingList: 'shoppingList'
 };
 /**
  * Create the Client
@@ -159,7 +175,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\Julia\\Documents\\DAW\\proyectofinal2\\despensa-backend\\src\\generated\\prisma",
+      "value": "C:\\Users\\PracDes3\\Desktop\\JULIA\\proyectoJul\\despensa-backend\\src\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -177,7 +193,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\Julia\\Documents\\DAW\\proyectofinal2\\despensa-backend\\prisma\\schema.prisma",
+    "sourceFilePath": "C:\\Users\\PracDes3\\Desktop\\JULIA\\proyectoJul\\despensa-backend\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -199,13 +215,13 @@ const config = {
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider      = \"prisma-client-js\"\n  output        = \"../src/generated/prisma\"\n  binaryTargets = [\"native\", \"debian-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider  = \"postgresql\"\n  url       = env(\"DATABASE_URL\")\n  directUrl = env(\"DIRECT_URL\")\n}\n\nenum ingredient_priority {\n  alta\n  media\n  baja\n}\n\nmodel ingredient {\n  id       Int                  @id @default(autoincrement())\n  name     String\n  category ingredient_category?\n  pantry   pantry[]\n}\n\nmodel pantry {\n  id           Int                  @id @default(autoincrement())\n  userId       Int\n  ingredientId Int\n  ingredient   ingredient           @relation(fields: [ingredientId], references: [id], map: \"Pantry_ingredientId_rel\")\n  user         user                 @relation(fields: [userId], references: [id], map: \"Pantry_userId_rel\")\n  category     ingredient_category?\n\n  @@index([ingredientId], map: \"Pantry_ingredientId_fkey\")\n  @@index([userId], map: \"Pantry_userId_fkey\")\n}\n\nmodel user {\n  id           Int      @id @default(autoincrement())\n  username     String\n  email        String   @unique(map: \"User_email_key\")\n  password     String\n  refreshToken String?\n  pantry       pantry[]\n}\n\nenum ingredient_category {\n  frutas_verduras\n  carnes_pescados\n  lacteos_huevos\n  despensa_granos\n  condimentos_aceites\n  snacks_extras\n}\n",
-  "inlineSchemaHash": "08eccacbb435adc5890d7c6f783229f6527940707d9ee711fc5e7bc3352bb0fd",
+  "inlineSchema": "generator client {\n  provider      = \"prisma-client-js\"\n  output        = \"../src/generated/prisma\"\n  binaryTargets = [\"native\", \"debian-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider  = \"postgresql\"\n  url       = env(\"DATABASE_URL\")\n  directUrl = env(\"DIRECT_URL\")\n}\n\nenum ingredient_priority {\n  alta\n  media\n  baja\n}\n\nmodel ingredient {\n  id           Int                  @id @default(autoincrement())\n  name         String\n  category     ingredient_category?\n  pantry       pantry[]\n  shoppingList shoppingList[]\n}\n\nmodel pantry {\n  id           Int                  @id @default(autoincrement())\n  userId       Int\n  ingredientId Int\n  ingredient   ingredient           @relation(fields: [ingredientId], references: [id], map: \"Pantry_ingredientId_rel\")\n  user         user                 @relation(fields: [userId], references: [id], map: \"Pantry_userId_rel\")\n  category     ingredient_category?\n\n  @@index([ingredientId], map: \"Pantry_ingredientId_fkey\")\n  @@index([userId], map: \"Pantry_userId_fkey\")\n}\n\nmodel user {\n  id           Int            @id @default(autoincrement())\n  username     String\n  email        String         @unique(map: \"User_email_key\")\n  password     String\n  refreshToken String?\n  pantry       pantry[]\n  shops        shop[]\n  shoppingList shoppingList[]\n}\n\nenum ingredient_category {\n  frutas_verduras\n  carnes_pescados\n  lacteos_huevos\n  despensa_granos\n  condimentos_aceites\n  snacks_extras\n}\n\nmodel shop {\n  id           Int            @id @default(autoincrement())\n  name         String\n  userId       Int\n  user         user           @relation(fields: [userId], references: [id])\n  shoppingList shoppingList[]\n\n  @@unique([userId, name])\n}\n\nmodel shoppingList {\n  id           Int        @id @default(autoincrement())\n  userId       Int\n  ingredientId Int\n  shopId       Int?\n  bought       Boolean?   @default(false)\n  user         user       @relation(fields: [userId], references: [id])\n  ingredient   ingredient @relation(fields: [ingredientId], references: [id])\n  shop         shop?      @relation(fields: [shopId], references: [id])\n\n  @@unique([userId, ingredientId])\n  @@index([userId])\n  @@index([ingredientId])\n  @@index([shopId])\n}\n",
+  "inlineSchemaHash": "535e73300c884a1054f16325969daa83b3ba3c17423e3aa1459c2e6ad26fbed2",
   "copyEngine": true
 }
 config.dirname = '/'
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"ingredient\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"category\",\"kind\":\"enum\",\"type\":\"ingredient_category\"},{\"name\":\"pantry\",\"kind\":\"object\",\"type\":\"pantry\",\"relationName\":\"ingredientTopantry\"}],\"dbName\":null},\"pantry\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"ingredientId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"ingredient\",\"kind\":\"object\",\"type\":\"ingredient\",\"relationName\":\"ingredientTopantry\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"user\",\"relationName\":\"pantryTouser\"},{\"name\":\"category\",\"kind\":\"enum\",\"type\":\"ingredient_category\"}],\"dbName\":null},\"user\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"username\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"refreshToken\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"pantry\",\"kind\":\"object\",\"type\":\"pantry\",\"relationName\":\"pantryTouser\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"ingredient\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"category\",\"kind\":\"enum\",\"type\":\"ingredient_category\"},{\"name\":\"pantry\",\"kind\":\"object\",\"type\":\"pantry\",\"relationName\":\"ingredientTopantry\"},{\"name\":\"shoppingList\",\"kind\":\"object\",\"type\":\"shoppingList\",\"relationName\":\"ingredientToshoppingList\"}],\"dbName\":null},\"pantry\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"ingredientId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"ingredient\",\"kind\":\"object\",\"type\":\"ingredient\",\"relationName\":\"ingredientTopantry\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"user\",\"relationName\":\"pantryTouser\"},{\"name\":\"category\",\"kind\":\"enum\",\"type\":\"ingredient_category\"}],\"dbName\":null},\"user\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"username\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"refreshToken\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"pantry\",\"kind\":\"object\",\"type\":\"pantry\",\"relationName\":\"pantryTouser\"},{\"name\":\"shops\",\"kind\":\"object\",\"type\":\"shop\",\"relationName\":\"shopTouser\"},{\"name\":\"shoppingList\",\"kind\":\"object\",\"type\":\"shoppingList\",\"relationName\":\"shoppingListTouser\"}],\"dbName\":null},\"shop\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"user\",\"relationName\":\"shopTouser\"},{\"name\":\"shoppingList\",\"kind\":\"object\",\"type\":\"shoppingList\",\"relationName\":\"shopToshoppingList\"}],\"dbName\":null},\"shoppingList\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"ingredientId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"shopId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"bought\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"user\",\"relationName\":\"shoppingListTouser\"},{\"name\":\"ingredient\",\"kind\":\"object\",\"type\":\"ingredient\",\"relationName\":\"ingredientToshoppingList\"},{\"name\":\"shop\",\"kind\":\"object\",\"type\":\"shop\",\"relationName\":\"shopToshoppingList\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
 config.engineWasm = {
   getRuntime: async () => require('./query_engine_bg.js'),

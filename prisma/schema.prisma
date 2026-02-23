@@ -21,6 +21,7 @@ model ingredient {
   name     String
   category ingredient_category?
   pantry   pantry[]
+  shoppingList shoppingList[]
 }
 
 model pantry {
@@ -42,7 +43,10 @@ model user {
   password     String
   refreshToken String?
   pantry       pantry[]
+  shops        shop[]
+  shoppingList shoppingList[]
 }
+
 
 enum ingredient_category {
   frutas_verduras
@@ -51,4 +55,28 @@ enum ingredient_category {
   despensa_granos
   condimentos_aceites
   snacks_extras
+}
+
+model shop {
+  id     Int    @id @default(autoincrement())
+  name   String
+  userId Int
+  user   user   @relation(fields: [userId], references: [id])
+  shoppingList shoppingList[]
+  @@unique([userId, name])
+}
+
+model shoppingList {
+  id           Int        @id @default(autoincrement())
+  userId       Int
+  ingredientId Int
+  shopId       Int?
+  bought       Boolean?   @default(false)
+  user         user       @relation(fields: [userId], references: [id])
+  ingredient   ingredient @relation(fields: [ingredientId], references: [id])
+  shop         shop?      @relation(fields: [shopId], references: [id])
+  @@index([userId])
+  @@index([ingredientId])
+  @@index([shopId])
+  @@unique([userId, ingredientId])
 }

@@ -9,13 +9,18 @@
 npm install
 ```
 
+
 ## Variables de entorno
 Crea un archivo `.env` en la raíz con:
 ```
-PORT=3002
-DATABASE_URL="mysql://root:@localhost:3306/despensa_db"
+PORT=5000
+DATABASE_URL="postgresql://..."
 JWT_SECRET=supersecreto123
+# Permite varios orígenes separados por coma para CORS (útil para local y producción)
+CORS_ORIGINS=https://despensa-frontend-dc3k.onrender.com,http://localhost:5050
 ```
+
+En Render, configura la variable de entorno `CORS_ORIGINS` para incluir los orígenes que necesites (por ejemplo, solo el frontend en producción o también localhost para pruebas temporales).
 
 ## Migraciones y Prisma
 ```bash

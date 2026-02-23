@@ -142,6 +142,20 @@ exports.Prisma.UserScalarFieldEnum = {
   refreshToken: 'refreshToken'
 };
 
+exports.Prisma.ShopScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  userId: 'userId'
+};
+
+exports.Prisma.ShoppingListScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  ingredientId: 'ingredientId',
+  shopId: 'shopId',
+  bought: 'bought'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -168,7 +182,9 @@ exports.ingredient_category = exports.$Enums.ingredient_category = {
 exports.Prisma.ModelName = {
   ingredient: 'ingredient',
   pantry: 'pantry',
-  user: 'user'
+  user: 'user',
+  shop: 'shop',
+  shoppingList: 'shoppingList'
 };
 
 /**
