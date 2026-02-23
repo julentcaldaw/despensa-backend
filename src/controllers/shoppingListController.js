@@ -181,6 +181,22 @@ export const deleteShoppingListItem = async (req, res) => {
   }
 };
 
+  export const updateBoughtStatus = async (req, res) => {
+    const { id } = req.params;
+    const { bought } = req.body;
+    if (typeof bought !== 'boolean') {
+      return res.status(400).json({ error: 'El estado comprado debe ser booleano.' });
+    }
+    try {
+      const item = await prisma.shoppingList.update({
+        where: { id: Number(id) },
+        data: { bought }
+      });
+      res.json(item);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  };
 export const markAsBought = async (req, res) => {
   const { id } = req.params;
   try {
