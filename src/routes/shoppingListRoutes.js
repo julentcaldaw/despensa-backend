@@ -10,10 +10,9 @@ import { authenticateToken } from '../middlewares/auth.js';
 
 const router = express.Router();
 
-router.get('/shopping-list', authenticateToken, getShoppingList);
-router.post('/shopping-list', authenticateToken, addShoppingListItem);
-router.delete('/shopping-list/:id', authenticateToken, deleteShoppingListItem);
-router.post('/shopping-list/:id/bought', authenticateToken, markAsBought);
+
+router.get('/shoppinglist', authenticateToken, getShoppingList);
+router.post('/shoppinglist', authenticateToken, addShoppingListItem);
 
 
 export default router;

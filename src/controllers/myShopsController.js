@@ -11,7 +11,8 @@ export const getMyShops = async (req, res) => {
 };
 
 export const addShop = async (req, res) => {
-  const { name } = req.body;
+  console.log('Body recibido:', req.body);
+  const name = req.body.name || req.body.shop;
   if (!name || typeof name !== 'string' || name.trim() === '') {
     return res.status(400).json({ error: 'El nombre de la tienda no puede estar vacío.' });
   }

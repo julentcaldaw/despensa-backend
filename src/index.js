@@ -1,5 +1,12 @@
-
 import express from 'express';
+import { PrismaClient } from './generated/prisma/index.js';
+const prisma = new PrismaClient();
+const app = express();
+// Middleware para exponer prisma en req
+app.use((req, res, next) => {
+  req.prisma = prisma;
+  next();
+});
 import dotenv from 'dotenv';
 import userRoutes from './routes/userRoutes.js';
 import pantryRoutes from './routes/pantryRoutes.js';
@@ -12,12 +19,6 @@ import cors from 'cors';
 
 
 dotenv.config();
-
-
-const app = express();
-
-
-
 app.use(express.json());
 
 
@@ -43,12 +44,12 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 
-
 app.use('/api/users', userRoutes);
 app.use('/api/pantry', pantryRoutes);
 app.use('/api/ingredients', ingredientRoutes);
 app.use('/api/recipes', recipeRoutes);
 app.use('/api/scanner', scannerRoutes);
+// Removed duplicate declaration of 'const app = express();'
 app.use('/api', shoppingListRoutes);
 app.use('/api/myshops', myShopsRoutes);
 
