@@ -1,3 +1,8 @@
+import express from 'express';
+import { PrismaClient } from './generated/prisma/index.js';
+const prisma = new PrismaClient();
+const app = express();
+
 // Middleware para forzar HTTPS en producción
 if (process.env.NODE_ENV === 'production') {
   app.use((req, res, next) => {
@@ -7,15 +12,13 @@ if (process.env.NODE_ENV === 'production') {
     next();
   });
 }
-import express from 'express';
-import { PrismaClient } from './generated/prisma/index.js';
-const prisma = new PrismaClient();
-const app = express();
+
 // Middleware para exponer prisma en req
 app.use((req, res, next) => {
   req.prisma = prisma;
   next();
 });
+
 import dotenv from 'dotenv';
 import userRoutes from './routes/userRoutes.js';
 import pantryRoutes from './routes/pantryRoutes.js';
