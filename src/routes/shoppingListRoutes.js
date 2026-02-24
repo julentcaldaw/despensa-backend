@@ -12,9 +12,10 @@ import { authenticateToken } from '../middlewares/auth.js';
 const router = express.Router();
 
 
-router.get('/shoppinglist', authenticateToken, getShoppingList);
-router.post('/shoppinglist', authenticateToken, addShoppingListItem);
-router.patch('/shoppinglist/:id/bought', authenticateToken, updateBoughtStatus);
+router.get('/listacompra', authenticateToken, getShoppingList);
+router.post('/listacompra', authenticateToken, addShoppingListItem);
+router.patch('/listacompra/:id/bought', authenticateToken, updateBoughtStatus);
+router.delete('/listacompra/:id', authenticateToken, deleteShoppingListItem);
 
 
 export default router;

@@ -13,7 +13,7 @@ router.get('/', (req, res) => {
 	});
 });
 
-router.get('/from-pantry', authenticateToken, getRecipesFromPantry);
-router.post('/from-list', authenticateToken, getRecipesFromList);
+router.get('/desde-despensa', authenticateToken, getRecipesFromPantry);
+router.post('/desde-lista', authenticateToken, getRecipesFromList);
 
 export default router;

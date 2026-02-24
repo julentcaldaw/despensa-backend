@@ -31,6 +31,7 @@ import jwt from 'jsonwebtoken';
 
 const prisma = new PrismaClient();
 
+
 export const register = async (req, res) => {
   const { username, email, password } = req.body;
   console.log('Intentando registrar usuario:', { username, email });
@@ -100,7 +101,78 @@ export const getProfile = async (req, res) => {
   try {
     const user = await prisma.user.findUnique({ where: { id: req.user.id } });
     if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
-    res.json({ id: user.id, username: user.username, email: user.email });
+
+    // Stats por defecto si no existen
+    const stats = user.stats || {
+      recetasGuardadas: 0,
+      itemsDespensa: 0,
+      aportaciones: 0
+    };
+
+    // Settings por defecto si no existen
+    const settings = user.settings || [
+      { label: "Restricciones Alimenticias", key: "restricciones", value: [] },
+      { label: "Preferencias de Dieta", key: "dieta", value: "Omnívoro" },
+      { label: "Notificaciones", key: "notificaciones", value: true },
+      { label: "Cerrar Sesión", key: "logout" }
+    ];
+
+    // Si no hay avatar personalizado, usar 'avatar.jpg'
+    let avatar = user.avatar;
+    if (!avatar || typeof avatar !== 'string' || avatar.trim() === '') {
+      avatar = 'avatar.jpg';
+    }
+    // Si el avatar es personalizado, podrías validar aquí si existe en el frontend (opcional)
+    res.json({
+      name: user.username,
+      email: user.email,
+      avatar,
+      stats,
+      settings
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
+// PUT /api/user/me
+export const updateProfile = async (req, res) => {
+  const { name, email, avatar, settings } = req.body;
+  try {
+    // Validar y sanitizar datos
+    if (email && typeof email !== 'string') return res.status(400).json({ error: 'Email inválido' });
+    if (name && typeof name !== 'string') return res.status(400).json({ error: 'Nombre inválido' });
+    if (avatar && typeof avatar !== 'string') return res.status(400).json({ error: 'Avatar inválido' });
+    // Actualizar usuario
+    const updated = await prisma.user.update({
+      where: { id: req.user.id },
+      data: {
+        username: name,
+        email,
+        avatar,
+        settings
+      }
+    });
+    res.json({
+      id: updated.id,
+      name: updated.username,
+      email: updated.email,
+      avatar: updated.avatar,
+      stats: updated.stats,
+      settings: updated.settings
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// GET /api/user/me/stats
+export const getUserStats = async (req, res) => {
+  try {
+    const user = await prisma.user.findUnique({ where: { id: req.user.id } });
+    if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
+    res.json(user.stats || {});
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

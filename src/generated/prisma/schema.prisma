@@ -45,6 +45,9 @@ model user {
   pantry       pantry[]
   shops        shop[]
   shoppingList shoppingList[]
+  avatar       String? // URL del avatar
+  stats        Json? // estadísticas del usuario
+  settings     Json? // ajustes del usuario
 }
 
 enum ingredient_category {

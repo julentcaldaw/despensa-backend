@@ -139,7 +139,10 @@ exports.Prisma.UserScalarFieldEnum = {
   username: 'username',
   email: 'email',
   password: 'password',
-  refreshToken: 'refreshToken'
+  refreshToken: 'refreshToken',
+  avatar: 'avatar',
+  stats: 'stats',
+  settings: 'settings'
 };
 
 exports.Prisma.ShopScalarFieldEnum = {
@@ -161,6 +164,11 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
+};
+
 exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
@@ -169,6 +177,12 @@ exports.Prisma.QueryMode = {
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
+};
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
 };
 exports.ingredient_category = exports.$Enums.ingredient_category = {
   frutas_verduras: 'frutas_verduras',

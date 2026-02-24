@@ -17,6 +17,7 @@ export const getShoppingList = async (req, res) => {
       if (!shopMap.has(shopKey)) shopMap.set(shopKey, []);
       shopMap.get(shopKey).push({
         id: item.id,
+        ingredientId: item.ingredient.id,
         name: item.ingredient.name,
         category: item.ingredient.category,
         bought: item.bought || false
@@ -159,6 +160,7 @@ export const addShoppingListItem = async (req, res) => {
       if (!shopMap.has(shopKey)) shopMap.set(shopKey, []);
       shopMap.get(shopKey).push({
         id: item.id,
+        ingredientId: item.ingredient.id,
         name: item.ingredient.name,
         category: item.ingredient.category,
         bought: item.bought || false
@@ -174,34 +176,80 @@ export const addShoppingListItem = async (req, res) => {
 export const deleteShoppingListItem = async (req, res) => {
   const { id } = req.params;
   try {
+    // Buscar el item y comprobar que pertenece al usuario autenticado
+    const item = await prisma.shoppingList.findUnique({ where: { id: Number(id) } });
+    if (!item) {
+      return res.status(404).json({ error: 'Ingrediente no encontrado en la lista de la compra' });
+    }
+    if (item.userId !== req.user.id) {
+      return res.status(403).json({ error: 'No tienes permiso para eliminar este ingrediente.' });
+    }
     await prisma.shoppingList.delete({ where: { id: Number(id) } });
-    res.json({ message: 'Ingrediente eliminado de la lista de la compra' });
+    // Obtener la lista de compra actualizada del usuario
+    const items = await prisma.shoppingList.findMany({
+      where: { userId: req.user.id },
+      include: {
+        ingredient: { select: { id: true, name: true, category: true } },
+        shop: { select: { id: true, name: true } }
+      }
+    });
+    const shopMap = new Map();
+    items.forEach(item => {
+      const shopKey = item.shop ? item.shop.name : 'Sin tienda';
+      if (!shopMap.has(shopKey)) shopMap.set(shopKey, []);
+      shopMap.get(shopKey).push({
+        id: item.id,
+        ingredientId: item.ingredient.id,
+        name: item.ingredient.name,
+        category: item.ingredient.category,
+        bought: item.bought || false
+      });
+    });
+    const shoppingListGrouped = Array.from(shopMap.entries()).map(([shop, items]) => ({ shop, items }));
+    res.json({ message: 'Ingrediente eliminado de la lista de la compra', shoppingList: shoppingListGrouped });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
-  export const updateBoughtStatus = async (req, res) => {
-    const { id } = req.params;
-    const { bought } = req.body;
-    if (typeof bought !== 'boolean') {
-      return res.status(400).json({ error: 'El estado comprado debe ser booleano.' });
-    }
-    try {
-      const item = await prisma.shoppingList.update({
-        where: { id: Number(id) },
-        data: { bought }
-      });
-      res.json(item);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  };
-export const markAsBought = async (req, res) => {
+export const updateBoughtStatus = async (req, res) => {
   const { id } = req.params;
+  const { bought } = req.body;
+  console.log('[updateBoughtStatus] id recibido:', id);
+  console.log('[updateBoughtStatus] userId autenticado:', req.user.id);
+  if (typeof bought !== 'boolean') {
+    return res.status(400).json({ error: 'El estado comprado debe ser booleano.' });
+  }
   try {
     const item = await prisma.shoppingList.findUnique({ where: { id: Number(id) } });
+    console.log('[updateBoughtStatus] Resultado búsqueda item:', item);
+    if (!item) {
+      return res.status(404).json({ error: 'Ingrediente no encontrado en la lista de la compra' });
+    }
+    if (item.userId !== req.user.id) {
+      return res.status(403).json({ error: 'No tienes permiso para modificar este ingrediente.' });
+    }
+    const updatedItem = await prisma.shoppingList.update({
+      where: { id: Number(id) },
+      data: { bought }
+    });
+    res.json(updatedItem);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const markAsBought = async (req, res) => {
+  const { id } = req.params;
+  console.log('[markAsBought] id recibido:', id);
+  console.log('[markAsBought] userId autenticado:', req.user.id);
+  try {
+    const item = await prisma.shoppingList.findUnique({ where: { id: Number(id) } });
+    console.log('[markAsBought] Resultado búsqueda item:', item);
     if (!item) return res.status(404).json({ error: 'Ingrediente no encontrado en la lista' });
+    if (item.userId !== req.user.id) {
+      return res.status(403).json({ error: 'No tienes permiso para modificar este ingrediente.' });
+    }
     await prisma.shoppingList.delete({ where: { id: Number(id) } });
     await prisma.pantry.create({
       data: {

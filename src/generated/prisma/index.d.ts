@@ -3605,6 +3605,7 @@ export namespace Prisma {
     email: string | null
     password: string | null
     refreshToken: string | null
+    avatar: string | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -3613,6 +3614,7 @@ export namespace Prisma {
     email: string | null
     password: string | null
     refreshToken: string | null
+    avatar: string | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -3621,6 +3623,9 @@ export namespace Prisma {
     email: number
     password: number
     refreshToken: number
+    avatar: number
+    stats: number
+    settings: number
     _all: number
   }
 
@@ -3639,6 +3644,7 @@ export namespace Prisma {
     email?: true
     password?: true
     refreshToken?: true
+    avatar?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -3647,6 +3653,7 @@ export namespace Prisma {
     email?: true
     password?: true
     refreshToken?: true
+    avatar?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -3655,6 +3662,9 @@ export namespace Prisma {
     email?: true
     password?: true
     refreshToken?: true
+    avatar?: true
+    stats?: true
+    settings?: true
     _all?: true
   }
 
@@ -3750,6 +3760,9 @@ export namespace Prisma {
     email: string
     password: string
     refreshToken: string | null
+    avatar: string | null
+    stats: JsonValue | null
+    settings: JsonValue | null
     _count: UserCountAggregateOutputType | null
     _avg: UserAvgAggregateOutputType | null
     _sum: UserSumAggregateOutputType | null
@@ -3777,6 +3790,9 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     refreshToken?: boolean
+    avatar?: boolean
+    stats?: boolean
+    settings?: boolean
     pantry?: boolean | user$pantryArgs<ExtArgs>
     shops?: boolean | user$shopsArgs<ExtArgs>
     shoppingList?: boolean | user$shoppingListArgs<ExtArgs>
@@ -3789,6 +3805,9 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     refreshToken?: boolean
+    avatar?: boolean
+    stats?: boolean
+    settings?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type userSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -3797,6 +3816,9 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     refreshToken?: boolean
+    avatar?: boolean
+    stats?: boolean
+    settings?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type userSelectScalar = {
@@ -3805,9 +3827,12 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     refreshToken?: boolean
+    avatar?: boolean
+    stats?: boolean
+    settings?: boolean
   }
 
-  export type userOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "username" | "email" | "password" | "refreshToken", ExtArgs["result"]["user"]>
+  export type userOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "username" | "email" | "password" | "refreshToken" | "avatar" | "stats" | "settings", ExtArgs["result"]["user"]>
   export type userInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     pantry?: boolean | user$pantryArgs<ExtArgs>
     shops?: boolean | user$shopsArgs<ExtArgs>
@@ -3830,6 +3855,9 @@ export namespace Prisma {
       email: string
       password: string
       refreshToken: string | null
+      avatar: string | null
+      stats: Prisma.JsonValue | null
+      settings: Prisma.JsonValue | null
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -4261,6 +4289,9 @@ export namespace Prisma {
     readonly email: FieldRef<"user", 'String'>
     readonly password: FieldRef<"user", 'String'>
     readonly refreshToken: FieldRef<"user", 'String'>
+    readonly avatar: FieldRef<"user", 'String'>
+    readonly stats: FieldRef<"user", 'Json'>
+    readonly settings: FieldRef<"user", 'Json'>
   }
     
 
@@ -7016,7 +7047,10 @@ export namespace Prisma {
     username: 'username',
     email: 'email',
     password: 'password',
-    refreshToken: 'refreshToken'
+    refreshToken: 'refreshToken',
+    avatar: 'avatar',
+    stats: 'stats',
+    settings: 'settings'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -7050,6 +7084,14 @@ export namespace Prisma {
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+  export const NullableJsonNullValueInput: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull
+  };
+
+  export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
   export const QueryMode: {
     default: 'default',
     insensitive: 'insensitive'
@@ -7064,6 +7106,15 @@ export namespace Prisma {
   };
 
   export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+  export const JsonNullValueFilter: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull,
+    AnyNull: typeof AnyNull
+  };
+
+  export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
   /**
@@ -7110,6 +7161,20 @@ export namespace Prisma {
    * Reference to a field of type 'ingredient_category[]'
    */
   export type ListEnumingredient_categoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ingredient_category[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Json'
+   */
+  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+  /**
+   * Reference to a field of type 'QueryMode'
+   */
+  export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
 
 
@@ -7251,6 +7316,9 @@ export namespace Prisma {
     email?: StringFilter<"user"> | string
     password?: StringFilter<"user"> | string
     refreshToken?: StringNullableFilter<"user"> | string | null
+    avatar?: StringNullableFilter<"user"> | string | null
+    stats?: JsonNullableFilter<"user">
+    settings?: JsonNullableFilter<"user">
     pantry?: PantryListRelationFilter
     shops?: ShopListRelationFilter
     shoppingList?: ShoppingListListRelationFilter
@@ -7262,6 +7330,9 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     refreshToken?: SortOrderInput | SortOrder
+    avatar?: SortOrderInput | SortOrder
+    stats?: SortOrderInput | SortOrder
+    settings?: SortOrderInput | SortOrder
     pantry?: pantryOrderByRelationAggregateInput
     shops?: shopOrderByRelationAggregateInput
     shoppingList?: shoppingListOrderByRelationAggregateInput
@@ -7276,6 +7347,9 @@ export namespace Prisma {
     username?: StringFilter<"user"> | string
     password?: StringFilter<"user"> | string
     refreshToken?: StringNullableFilter<"user"> | string | null
+    avatar?: StringNullableFilter<"user"> | string | null
+    stats?: JsonNullableFilter<"user">
+    settings?: JsonNullableFilter<"user">
     pantry?: PantryListRelationFilter
     shops?: ShopListRelationFilter
     shoppingList?: ShoppingListListRelationFilter
@@ -7287,6 +7361,9 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     refreshToken?: SortOrderInput | SortOrder
+    avatar?: SortOrderInput | SortOrder
+    stats?: SortOrderInput | SortOrder
+    settings?: SortOrderInput | SortOrder
     _count?: userCountOrderByAggregateInput
     _avg?: userAvgOrderByAggregateInput
     _max?: userMaxOrderByAggregateInput
@@ -7303,6 +7380,9 @@ export namespace Prisma {
     email?: StringWithAggregatesFilter<"user"> | string
     password?: StringWithAggregatesFilter<"user"> | string
     refreshToken?: StringNullableWithAggregatesFilter<"user"> | string | null
+    avatar?: StringNullableWithAggregatesFilter<"user"> | string | null
+    stats?: JsonNullableWithAggregatesFilter<"user">
+    settings?: JsonNullableWithAggregatesFilter<"user">
   }
 
   export type shopWhereInput = {
@@ -7516,6 +7596,9 @@ export namespace Prisma {
     email: string
     password: string
     refreshToken?: string | null
+    avatar?: string | null
+    stats?: NullableJsonNullValueInput | InputJsonValue
+    settings?: NullableJsonNullValueInput | InputJsonValue
     pantry?: pantryCreateNestedManyWithoutUserInput
     shops?: shopCreateNestedManyWithoutUserInput
     shoppingList?: shoppingListCreateNestedManyWithoutUserInput
@@ -7527,6 +7610,9 @@ export namespace Prisma {
     email: string
     password: string
     refreshToken?: string | null
+    avatar?: string | null
+    stats?: NullableJsonNullValueInput | InputJsonValue
+    settings?: NullableJsonNullValueInput | InputJsonValue
     pantry?: pantryUncheckedCreateNestedManyWithoutUserInput
     shops?: shopUncheckedCreateNestedManyWithoutUserInput
     shoppingList?: shoppingListUncheckedCreateNestedManyWithoutUserInput
@@ -7537,6 +7623,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    stats?: NullableJsonNullValueInput | InputJsonValue
+    settings?: NullableJsonNullValueInput | InputJsonValue
     pantry?: pantryUpdateManyWithoutUserNestedInput
     shops?: shopUpdateManyWithoutUserNestedInput
     shoppingList?: shoppingListUpdateManyWithoutUserNestedInput
@@ -7548,6 +7637,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    stats?: NullableJsonNullValueInput | InputJsonValue
+    settings?: NullableJsonNullValueInput | InputJsonValue
     pantry?: pantryUncheckedUpdateManyWithoutUserNestedInput
     shops?: shopUncheckedUpdateManyWithoutUserNestedInput
     shoppingList?: shoppingListUncheckedUpdateManyWithoutUserNestedInput
@@ -7559,6 +7651,9 @@ export namespace Prisma {
     email: string
     password: string
     refreshToken?: string | null
+    avatar?: string | null
+    stats?: NullableJsonNullValueInput | InputJsonValue
+    settings?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type userUpdateManyMutationInput = {
@@ -7566,6 +7661,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    stats?: NullableJsonNullValueInput | InputJsonValue
+    settings?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type userUncheckedUpdateManyInput = {
@@ -7574,6 +7672,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    stats?: NullableJsonNullValueInput | InputJsonValue
+    settings?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type shopCreateInput = {
@@ -7853,6 +7954,29 @@ export namespace Prisma {
     mode?: QueryMode
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
+  export type JsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
 
   export type ShopListRelationFilter = {
     every?: shopWhereInput
@@ -7870,6 +7994,9 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     refreshToken?: SortOrder
+    avatar?: SortOrder
+    stats?: SortOrder
+    settings?: SortOrder
   }
 
   export type userAvgOrderByAggregateInput = {
@@ -7882,6 +8009,7 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     refreshToken?: SortOrder
+    avatar?: SortOrder
   }
 
   export type userMinOrderByAggregateInput = {
@@ -7890,6 +8018,7 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     refreshToken?: SortOrder
+    avatar?: SortOrder
   }
 
   export type userSumOrderByAggregateInput = {
@@ -7912,6 +8041,32 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
     _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
   export type shopUserIdNameCompoundUniqueInput = {
@@ -8532,6 +8687,29 @@ export namespace Prisma {
     _min?: NestedStringNullableFilter<$PrismaModel>
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
+  export type NestedJsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
 
   export type NestedBoolNullableFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
@@ -8693,6 +8871,9 @@ export namespace Prisma {
     email: string
     password: string
     refreshToken?: string | null
+    avatar?: string | null
+    stats?: NullableJsonNullValueInput | InputJsonValue
+    settings?: NullableJsonNullValueInput | InputJsonValue
     shops?: shopCreateNestedManyWithoutUserInput
     shoppingList?: shoppingListCreateNestedManyWithoutUserInput
   }
@@ -8703,6 +8884,9 @@ export namespace Prisma {
     email: string
     password: string
     refreshToken?: string | null
+    avatar?: string | null
+    stats?: NullableJsonNullValueInput | InputJsonValue
+    settings?: NullableJsonNullValueInput | InputJsonValue
     shops?: shopUncheckedCreateNestedManyWithoutUserInput
     shoppingList?: shoppingListUncheckedCreateNestedManyWithoutUserInput
   }
@@ -8752,6 +8936,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    stats?: NullableJsonNullValueInput | InputJsonValue
+    settings?: NullableJsonNullValueInput | InputJsonValue
     shops?: shopUpdateManyWithoutUserNestedInput
     shoppingList?: shoppingListUpdateManyWithoutUserNestedInput
   }
@@ -8762,6 +8949,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    stats?: NullableJsonNullValueInput | InputJsonValue
+    settings?: NullableJsonNullValueInput | InputJsonValue
     shops?: shopUncheckedUpdateManyWithoutUserNestedInput
     shoppingList?: shoppingListUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -8893,6 +9083,9 @@ export namespace Prisma {
     email: string
     password: string
     refreshToken?: string | null
+    avatar?: string | null
+    stats?: NullableJsonNullValueInput | InputJsonValue
+    settings?: NullableJsonNullValueInput | InputJsonValue
     pantry?: pantryCreateNestedManyWithoutUserInput
     shoppingList?: shoppingListCreateNestedManyWithoutUserInput
   }
@@ -8903,6 +9096,9 @@ export namespace Prisma {
     email: string
     password: string
     refreshToken?: string | null
+    avatar?: string | null
+    stats?: NullableJsonNullValueInput | InputJsonValue
+    settings?: NullableJsonNullValueInput | InputJsonValue
     pantry?: pantryUncheckedCreateNestedManyWithoutUserInput
     shoppingList?: shoppingListUncheckedCreateNestedManyWithoutUserInput
   }
@@ -8951,6 +9147,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    stats?: NullableJsonNullValueInput | InputJsonValue
+    settings?: NullableJsonNullValueInput | InputJsonValue
     pantry?: pantryUpdateManyWithoutUserNestedInput
     shoppingList?: shoppingListUpdateManyWithoutUserNestedInput
   }
@@ -8961,6 +9160,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    stats?: NullableJsonNullValueInput | InputJsonValue
+    settings?: NullableJsonNullValueInput | InputJsonValue
     pantry?: pantryUncheckedUpdateManyWithoutUserNestedInput
     shoppingList?: shoppingListUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -8986,6 +9188,9 @@ export namespace Prisma {
     email: string
     password: string
     refreshToken?: string | null
+    avatar?: string | null
+    stats?: NullableJsonNullValueInput | InputJsonValue
+    settings?: NullableJsonNullValueInput | InputJsonValue
     pantry?: pantryCreateNestedManyWithoutUserInput
     shops?: shopCreateNestedManyWithoutUserInput
   }
@@ -8996,6 +9201,9 @@ export namespace Prisma {
     email: string
     password: string
     refreshToken?: string | null
+    avatar?: string | null
+    stats?: NullableJsonNullValueInput | InputJsonValue
+    settings?: NullableJsonNullValueInput | InputJsonValue
     pantry?: pantryUncheckedCreateNestedManyWithoutUserInput
     shops?: shopUncheckedCreateNestedManyWithoutUserInput
   }
@@ -9055,6 +9263,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    stats?: NullableJsonNullValueInput | InputJsonValue
+    settings?: NullableJsonNullValueInput | InputJsonValue
     pantry?: pantryUpdateManyWithoutUserNestedInput
     shops?: shopUpdateManyWithoutUserNestedInput
   }
@@ -9065,6 +9276,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    stats?: NullableJsonNullValueInput | InputJsonValue
+    settings?: NullableJsonNullValueInput | InputJsonValue
     pantry?: pantryUncheckedUpdateManyWithoutUserNestedInput
     shops?: shopUncheckedUpdateManyWithoutUserNestedInput
   }
