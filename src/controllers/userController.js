@@ -102,6 +102,12 @@ export const getProfile = async (req, res) => {
     const user = await prisma.user.findUnique({ where: { id: req.user.id } });
     if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
 
+
+    // Calcular el número de items en la lista de la compra
+    const shoppingListCount = await prisma.shoppingList.count({ where: { userId: req.user.id } });
+    // Calcular el número de items en la despensa
+    const pantryCount = await prisma.pantry.count({ where: { userId: req.user.id } });
+
     // Stats por defecto si no existen
     const stats = user.stats || {
       recetasGuardadas: 0,
@@ -122,12 +128,13 @@ export const getProfile = async (req, res) => {
     if (!avatar || typeof avatar !== 'string' || avatar.trim() === '') {
       avatar = 'avatar.jpg';
     }
-    // Si el avatar es personalizado, podrías validar aquí si existe en el frontend (opcional)
     res.json({
       name: user.username,
       email: user.email,
       avatar,
       stats,
+      shoppingListCount,
+      pantryCount,
       settings
     });
   } catch (error) {

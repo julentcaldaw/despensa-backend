@@ -14,3 +14,4 @@ router.put('/usuario', authenticateToken, updateProfile);
 router.get('/usuario/estado', authenticateToken, getUserStats);
 
 export default router;
+ 
