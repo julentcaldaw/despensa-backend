@@ -23,6 +23,7 @@ app.use((req, res, next) => {
   next();
 });
 
+
 import userRoutes from './routes/userRoutes.js';
 import pantryRoutes from './routes/pantryRoutes.js';
 import ingredientRoutes from './routes/ingredientRoutes.js';
@@ -31,11 +32,6 @@ import scannerRoutes from './routes/scannerRoutes.js';
 import shoppingListRoutes from './routes/shoppingListRoutes.js';
 import myShopsRoutes from './routes/myShopsRoutes.js';
 import cors from 'cors';
-
-app.use(express.json());
-app.use(express.json());
-
-
 
 // Configuración robusta de CORS compatible con Safari/iOS y móviles
 const allowedOrigins = (process.env.CORS_ORIGINS || 'https://despensa-frontend-dc3k.onrender.com').split(',').map(origin => origin.trim());
@@ -62,6 +58,7 @@ app.use(cors(corsOptions));
 // Opcional: Responder manualmente a preflight para máxima compatibilidad
 app.options('*', cors(corsOptions));
 
+app.use(express.json());
 
 app.use('/api', userRoutes);
 app.use('/api/pantry', pantryRoutes);
