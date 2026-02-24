@@ -1,3 +1,7 @@
+
+import dotenv from 'dotenv';
+dotenv.config();
+
 import express from 'express';
 import { PrismaClient } from './generated/prisma/index.js';
 const prisma = new PrismaClient();
@@ -19,7 +23,6 @@ app.use((req, res, next) => {
   next();
 });
 
-import dotenv from 'dotenv';
 import userRoutes from './routes/userRoutes.js';
 import pantryRoutes from './routes/pantryRoutes.js';
 import ingredientRoutes from './routes/ingredientRoutes.js';
@@ -29,8 +32,7 @@ import shoppingListRoutes from './routes/shoppingListRoutes.js';
 import myShopsRoutes from './routes/myShopsRoutes.js';
 import cors from 'cors';
 
-
-dotenv.config();
+app.use(express.json());
 app.use(express.json());
 
 
