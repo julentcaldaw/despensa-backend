@@ -1,3 +1,12 @@
+// Middleware para forzar HTTPS en producción
+if (process.env.NODE_ENV === 'production') {
+  app.use((req, res, next) => {
+    if (req.headers['x-forwarded-proto'] !== 'https') {
+      return res.redirect('https://' + req.headers.host + req.url);
+    }
+    next();
+  });
+}
 import express from 'express';
 import { PrismaClient } from './generated/prisma/index.js';
 const prisma = new PrismaClient();
@@ -22,14 +31,14 @@ dotenv.config();
 app.use(express.json());
 
 
-const allowedOrigins = (process.env.CORS_ORIGINS || 'https://despensa-frontend-dc3k.onrender.com,http://localhost:5050')
-  .split(',')
-  .map(origin => origin.trim());
 
+// Configuración robusta de CORS compatible con Safari/iOS y móviles
+const allowedOrigins = (process.env.CORS_ORIGINS || 'https://despensa-frontend-dc3k.onrender.com').split(',').map(origin => origin.trim());
 console.log('CORS allowed origins:', allowedOrigins);
 
 const corsOptions = {
   origin: function (origin, callback) {
+    // Permitir peticiones sin origen (como desde apps móviles nativas o curl)
     if (!origin) return callback(null, true);
     if (allowedOrigins.includes(origin)) {
       return callback(null, true);
@@ -38,10 +47,15 @@ const corsOptions = {
       return callback(new Error('Origen no permitido por CORS: ' + origin));
     }
   },
-  optionsSuccessStatus: 200,
-  credentials: true
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin', 'X-Requested-With'],
+  optionsSuccessStatus: 200
 };
 app.use(cors(corsOptions));
+
+// Opcional: Responder manualmente a preflight para máxima compatibilidad
+app.options('*', cors(corsOptions));
 
 
 app.use('/api', userRoutes);

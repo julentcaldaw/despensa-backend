@@ -18,6 +18,14 @@ export const refreshToken = async (req, res) => {
           process.env.JWT_SECRET,
           { expiresIn: '2h' }
         );
+        // Configurar cookie segura para el token si es necesario
+        const isProduction = process.env.NODE_ENV === 'production';
+        res.cookie('token', token, {
+          httpOnly: true,
+          secure: isProduction,
+          sameSite: isProduction ? 'none' : 'lax',
+          maxAge: 2 * 60 * 60 * 1000 // 2 horas
+        });
         res.json({ token });
       }
     );
@@ -85,6 +93,20 @@ export const login = async (req, res) => {
     );
     await prisma.user.update({ where: { id: user.id }, data: { refreshToken } });
     console.log('Login exitoso para usuario:', { id: user.id, email: user.email });
+    // Configurar cookies seguras para token y refreshToken
+    const isProduction = process.env.NODE_ENV === 'production';
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: isProduction ? 'none' : 'lax',
+      maxAge: 2 * 60 * 60 * 1000 // 2 horas
+    });
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: isProduction ? 'none' : 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 días
+    });
     res.json({
       message: 'Login exitoso',
       token,
