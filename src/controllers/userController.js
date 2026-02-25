@@ -93,19 +93,18 @@ export const login = async (req, res) => {
     );
     await prisma.user.update({ where: { id: user.id }, data: { refreshToken } });
     console.log('Login exitoso para usuario:', { id: user.id, email: user.email });
-    // Configurar cookies seguras para token y refreshToken
     const isProduction = process.env.NODE_ENV === 'production';
     res.cookie('token', token, {
       httpOnly: true,
       secure: isProduction,
       sameSite: isProduction ? 'none' : 'lax',
-      maxAge: 2 * 60 * 60 * 1000 // 2 horas
+      maxAge: 2 * 60 * 60 * 1000 
     });
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       secure: isProduction,
       sameSite: isProduction ? 'none' : 'lax',
-      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 días
+      maxAge: 7 * 24 * 60 * 60 * 1000 
     });
     res.json({
       message: 'Login exitoso',
@@ -125,19 +124,15 @@ export const getProfile = async (req, res) => {
     if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
 
 
-    // Calcular el número de items en la lista de la compra
     const shoppingListCount = await prisma.shoppingList.count({ where: { userId: req.user.id } });
-    // Calcular el número de items en la despensa
     const pantryCount = await prisma.pantry.count({ where: { userId: req.user.id } });
 
-    // Stats por defecto si no existen
     const stats = user.stats || {
       recetasGuardadas: 0,
       itemsDespensa: 0,
       aportaciones: 0
     };
 
-    // Settings por defecto si no existen
     const settings = user.settings || [
       { label: "Restricciones Alimenticias", key: "restricciones", value: [] },
       { label: "Preferencias de Dieta", key: "dieta", value: "Omnívoro" },
@@ -145,7 +140,6 @@ export const getProfile = async (req, res) => {
       { label: "Cerrar Sesión", key: "logout" }
     ];
 
-    // Si no hay avatar personalizado, usar 'avatar.jpg'
     let avatar = user.avatar;
     if (!avatar || typeof avatar !== 'string' || avatar.trim() === '') {
       avatar = 'avatar.jpg';
@@ -165,15 +159,12 @@ export const getProfile = async (req, res) => {
 };
 
 
-// PUT /api/user/me
 export const updateProfile = async (req, res) => {
   const { name, email, avatar, settings } = req.body;
   try {
-    // Validar y sanitizar datos
     if (email && typeof email !== 'string') return res.status(400).json({ error: 'Email inválido' });
     if (name && typeof name !== 'string') return res.status(400).json({ error: 'Nombre inválido' });
     if (avatar && typeof avatar !== 'string') return res.status(400).json({ error: 'Avatar inválido' });
-    // Actualizar usuario
     const updated = await prisma.user.update({
       where: { id: req.user.id },
       data: {
@@ -196,7 +187,6 @@ export const updateProfile = async (req, res) => {
   }
 };
 
-// GET /api/user/me/stats
 export const getUserStats = async (req, res) => {
   try {
     const user = await prisma.user.findUnique({ where: { id: req.user.id } });
