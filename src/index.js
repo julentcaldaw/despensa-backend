@@ -1,6 +1,8 @@
 
+
 import dotenv from 'dotenv';
 dotenv.config();
+console.log('DEBUG JWT_SECRET:', process.env.JWT_SECRET);
 
 import express from 'express';
 import { PrismaClient } from './generated/prisma/index.js';
@@ -25,6 +27,7 @@ app.use((req, res, next) => {
 
 
 import userRoutes from './routes/userRoutes.js';
+import dietRestrictionsRoutes from './routes/dietRestrictionsRoutes.js';
 import pantryRoutes from './routes/pantryRoutes.js';
 import ingredientRoutes from './routes/ingredientRoutes.js';
 import recipeRoutes from './routes/recipeRoutes.js';
@@ -61,6 +64,7 @@ app.options('*', cors(corsOptions));
 app.use(express.json());
 
 app.use('/api', userRoutes);
+app.use('/api/usuario/restricciones', dietRestrictionsRoutes);
 app.use('/api/enum', enumRoutes);
 app.use('/api/pantry', pantryRoutes);
 app.use('/api/ingredients', ingredientRoutes);

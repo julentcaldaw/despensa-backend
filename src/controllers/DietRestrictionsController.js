@@ -1,6 +1,7 @@
 
 
-import prisma from '../generated/prisma/index.js';
+import { PrismaClient } from '../generated/prisma/index.js';
+const prisma = new PrismaClient();
 
 export const getDietRestrictions = async (req, res) => {
   try {
@@ -20,6 +21,8 @@ export const getDietRestrictions = async (req, res) => {
 
 export const saveDietRestrictions = async (req, res) => {
   try {
+    console.log('DEBUG saveDietRestrictions req.user:', req.user);
+    console.log('DEBUG saveDietRestrictions req.body:', req.body);
     const userId = req.user.id;
     const { restrictions } = req.body;
     // Validación básica
@@ -36,6 +39,7 @@ export const saveDietRestrictions = async (req, res) => {
     });
     res.json({ message: 'Restricciones actualizadas correctamente.', restrictions: updatedUser.dietRestrictions });
   } catch (error) {
+    console.error('ERROR saveDietRestrictions:', error);
     if (error.code === 'P2025') {
       return res.status(404).json({ message: 'Usuario no encontrado.' });
     }
