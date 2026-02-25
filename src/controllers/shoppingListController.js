@@ -32,11 +32,9 @@ export const getShoppingList = async (req, res) => {
 
 export const addShoppingListItem = async (req, res) => {
   const { shoppingList, shops, filters } = req.body;
-  // Validación básica
   if (!Array.isArray(shoppingList) || !Array.isArray(shops) || typeof filters !== 'object') {
     return res.status(400).json({ error: 'Formato de datos inválido. Debe incluir shoppingList, shops y filters.' });
   }
-  // Validar cada ingrediente
   for (const item of shoppingList) {
     if (!item.ingredient || typeof item.ingredient !== 'string' || !item.shop || typeof item.shop !== 'string' || !item.category || typeof item.category !== 'string') {
       return res.status(400).json({ error: 'Cada elemento debe tener ingredient, shop y category válidos.' });
@@ -63,20 +61,16 @@ export const addShoppingListItem = async (req, res) => {
       return res.status(400).json({ error: `addedAt debe estar en formato ISO.` });
     }
   }
-  // Validar usuario autenticado
   if (!req.user || !req.user.id) {
     return res.status(401).json({ error: 'Usuario no autenticado.' });
   }
-  // Validar filtros
   const allowedOrders = ['categoria', 'ultimo'];
   if (filters.order && !allowedOrders.includes(filters.order)) {
     return res.status(400).json({ error: `Criterio de orden inválido: ${filters.order}` });
   }
-  // Guardar cada ingrediente en la lista
   try {
     const results = [];
     for (const item of shoppingList) {
-      // Buscar el ingrediente por nombre y categoría
       let ingredient = await prisma.ingredient.findFirst({
         where: {
           name: item.ingredient,
@@ -84,7 +78,6 @@ export const addShoppingListItem = async (req, res) => {
         }
       });
       if (!ingredient) {
-        // Crear el ingrediente si no existe
         try {
           ingredient = await prisma.ingredient.create({
             data: {
@@ -100,7 +93,6 @@ export const addShoppingListItem = async (req, res) => {
           continue;
         }
       }
-      // Buscar o crear la tienda por nombre, asociada al usuario autenticado
       let shop = await prisma.shop.findFirst({
         where: {
           name: item.shop,
@@ -108,8 +100,7 @@ export const addShoppingListItem = async (req, res) => {
         }
       });
       if (!shop) {
-        console.info(`[INFO] Tienda no encontrada, creando: ${item.shop}`);
-        // Crear la tienda si no existe
+        console.info(`[INFO] ${item.shop} no encontrada `);
         shop = await prisma.shop.create({
           data: {
             name: item.shop,
@@ -118,7 +109,6 @@ export const addShoppingListItem = async (req, res) => {
         });
         results.push({ info: `Tienda creada: ${item.shop}` });
       }
-      // Verificar si ya existe el ingrediente en la lista para este usuario
       const exists = await prisma.shoppingList.findFirst({
         where: {
           userId: req.user.id,
@@ -130,7 +120,6 @@ export const addShoppingListItem = async (req, res) => {
         results.push({ info: `El ingrediente ${item.ingredient} ya está en la lista de la compra.` });
         continue;
       }
-      // Crear el item en la lista de la compra, asociando al usuario autenticado
       try {
         const shoppingItem = await prisma.shoppingList.create({
           data: {
@@ -146,7 +135,6 @@ export const addShoppingListItem = async (req, res) => {
         results.push({ error: `No se pudo añadir el ingrediente ${item.ingredient} a la lista: ${err.message}` });
       }
     }
-    // Obtener la lista de compra actualizada del usuario (formato array agrupado)
     const items = await prisma.shoppingList.findMany({
       where: { userId: req.user.id },
       include: {
@@ -176,7 +164,6 @@ export const addShoppingListItem = async (req, res) => {
 export const deleteShoppingListItem = async (req, res) => {
   const { id } = req.params;
   try {
-    // Buscar el item y comprobar que pertenece al usuario autenticado
     const item = await prisma.shoppingList.findUnique({ where: { id: Number(id) } });
     if (!item) {
       return res.status(404).json({ error: 'Ingrediente no encontrado en la lista de la compra' });
@@ -185,7 +172,6 @@ export const deleteShoppingListItem = async (req, res) => {
       return res.status(403).json({ error: 'No tienes permiso para eliminar este ingrediente.' });
     }
     await prisma.shoppingList.delete({ where: { id: Number(id) } });
-    // Obtener la lista de compra actualizada del usuario
     const items = await prisma.shoppingList.findMany({
       where: { userId: req.user.id },
       include: {
