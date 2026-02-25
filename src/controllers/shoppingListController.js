@@ -10,7 +10,6 @@ export const getShoppingList = async (req, res) => {
         shop: { select: { id: true, name: true } }
       }
     });
-    // Agrupar por tienda en formato array
     const shopMap = new Map();
     items.forEach(item => {
       const shopKey = item.shop ? item.shop.name : 'Sin tienda';
@@ -35,7 +34,6 @@ export const addShoppingListItem = async (req, res) => {
   if (!Array.isArray(shoppingList) || !Array.isArray(shops) || typeof filters !== 'object') {
     return res.status(400).json({ error: 'Formato de datos inválido. Debe incluir shoppingList, shops y filters.' });
   }
-  // Validación y autocompletado de categoría
   const allowedCategories = [
     'frutas_verduras',
     'carnes_pescados',
@@ -47,15 +45,14 @@ export const addShoppingListItem = async (req, res) => {
   const allowedStatus = ['pending', 'bought', 'deleted'];
   for (const item of shoppingList) {
     if (!item.ingredient || typeof item.ingredient !== 'string' || !item.shop || typeof item.shop !== 'string') {
-      return res.status(400).json({ error: 'Cada elemento debe tener ingredient y shop válidos.' });
+      return res.status(400).json({ error: 'Cada elemento debe tener nombre y tienda válidos.' });
     }
-    // Si no viene categoría, buscarla por nombre
     if (!item.category || typeof item.category !== 'string') {
       const found = await prisma.ingredient.findFirst({ where: { name: item.ingredient } });
       if (found && allowedCategories.includes(found.category)) {
         item.category = found.category;
       } else {
-        return res.status(400).json({ error: `No se pudo determinar la categoría para el ingrediente: ${item.ingredient}` });
+        return res.status(400).json({ error: `No se pudo determinar la categoría de ${item.ingredient}` });
       }
     }
     if (!allowedCategories.includes(item.category)) {
@@ -65,7 +62,7 @@ export const addShoppingListItem = async (req, res) => {
       return res.status(400).json({ error: `Estado inválido: ${item.status}` });
     }
     if (!shops.includes(item.shop)) {
-      return res.status(400).json({ error: `La tienda ${item.shop} no está en la lista de tiendas del usuario.` });
+      return res.status(400).json({ error: `${item.shop} no está en la lista de tiendas del usuario.` });
     }
     if (item.addedAt && isNaN(Date.parse(item.addedAt))) {
       return res.status(400).json({ error: `addedAt debe estar en formato ISO.` });
@@ -95,11 +92,11 @@ export const addShoppingListItem = async (req, res) => {
               category: item.category
             }
           });
-          console.info(`[INFO] Ingrediente creado: ${item.ingredient} (${item.category})`);
+          console.info(`Ingrediente creado: ${item.ingredient} (${item.category})`);
           results.push({ info: `Ingrediente creado: ${item.ingredient}` });
         } catch (err) {
-          console.error(`[ERROR] No se pudo crear el ingrediente ${item.ingredient}: ${err.message}`);
-          results.push({ error: `No se pudo crear el ingrediente ${item.ingredient}: ${err.message}` });
+          console.error(`No se pudo crear ${item.ingredient}: ${err.message}`);
+          results.push({ error: `No se pudo crear ${item.ingredient}: ${err.message}` });
           continue;
         }
       }
@@ -110,7 +107,7 @@ export const addShoppingListItem = async (req, res) => {
         }
       });
       if (!shop) {
-        console.info(`[INFO] ${item.shop} no encontrada `);
+        console.info(`${item.shop} no encontrada `);
         shop = await prisma.shop.create({
           data: {
             name: item.shop,
@@ -126,8 +123,8 @@ export const addShoppingListItem = async (req, res) => {
         }
       });
       if (exists) {
-        console.info(`[INFO] Ingrediente ya en la lista: ${item.ingredient}`);
-        results.push({ info: `El ingrediente ${item.ingredient} ya está en la lista de la compra.` });
+        console.info(`${item.ingredient} ingrediente ya en la lista: `);
+        results.push({ info: `${item.ingredient} ya está en la lista de la compra.` });
         continue;
       }
       try {
@@ -141,8 +138,8 @@ export const addShoppingListItem = async (req, res) => {
         });
         results.push({ success: true, item: shoppingItem });
       } catch (err) {
-        console.error(`[ERROR] No se pudo añadir el ingrediente ${item.ingredient}: ${err.message}`);
-        results.push({ error: `No se pudo añadir el ingrediente ${item.ingredient} a la lista: ${err.message}` });
+        console.error(`No se pudo añadir ${item.ingredient}: ${err.message}`);
+        results.push({ error: `No se pudo añadir ${item.ingredient} a la lista: ${err.message}` });
       }
     }
     const items = await prisma.shoppingList.findMany({
@@ -179,7 +176,7 @@ export const deleteShoppingListItem = async (req, res) => {
       return res.status(404).json({ error: 'Ingrediente no encontrado en la lista de la compra' });
     }
     if (item.userId !== req.user.id) {
-      return res.status(403).json({ error: 'No tienes permiso para eliminar este ingrediente.' });
+      return res.status(403).json({ error: `No tienes permiso para eliminar ${item.ingredient}.` });
     }
     await prisma.shoppingList.delete({ where: { id: Number(id) } });
     const items = await prisma.shoppingList.findMany({
@@ -202,7 +199,7 @@ export const deleteShoppingListItem = async (req, res) => {
       });
     });
     const shoppingListGrouped = Array.from(shopMap.entries()).map(([shop, items]) => ({ shop, items }));
-    res.json({ message: 'Ingrediente eliminado de la lista de la compra', shoppingList: shoppingListGrouped });
+    res.json({ message: `${item.ingredient.name} eliminado de la lista de la compra`, shoppingList: shoppingListGrouped });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -211,14 +208,14 @@ export const deleteShoppingListItem = async (req, res) => {
 export const updateBoughtStatus = async (req, res) => {
   const { id } = req.params;
   const { bought } = req.body;
-  console.log('[updateBoughtStatus] id recibido:', id);
-  console.log('[updateBoughtStatus] userId autenticado:', req.user.id);
+  console.log('id recibido:', id);
+  console.log('userId autenticado:', req.user.id);
   if (typeof bought !== 'boolean') {
     return res.status(400).json({ error: 'El estado comprado debe ser booleano.' });
   }
   try {
     const item = await prisma.shoppingList.findUnique({ where: { id: Number(id) } });
-    console.log('[updateBoughtStatus] Resultado búsqueda item:', item);
+    console.log('Resultado búsqueda item:', item);
     if (!item) {
       return res.status(404).json({ error: 'Ingrediente no encontrado en la lista de la compra' });
     }
@@ -237,14 +234,14 @@ export const updateBoughtStatus = async (req, res) => {
 
 export const markAsBought = async (req, res) => {
   const { id } = req.params;
-  console.log('[markAsBought] id recibido:', id);
-  console.log('[markAsBought] userId autenticado:', req.user.id);
+  console.log('id recibido:', id);
+  console.log('userId autenticado:', req.user.id);
   try {
     const item = await prisma.shoppingList.findUnique({ where: { id: Number(id) } });
-    console.log('[markAsBought] Resultado búsqueda item:', item);
+    console.log('Resultado búsqueda item:', item);
     if (!item) return res.status(404).json({ error: 'Ingrediente no encontrado en la lista' });
     if (item.userId !== req.user.id) {
-      return res.status(403).json({ error: 'No tienes permiso para modificar este ingrediente.' });
+      return res.status(403).json({ error: `No tienes permiso para modificar ${item.ingredient.name}.` });
     }
     await prisma.shoppingList.delete({ where: { id: Number(id) } });
     await prisma.pantry.create({
@@ -253,7 +250,7 @@ export const markAsBought = async (req, res) => {
         ingredientId: item.ingredientId
       }
     });
-    res.json({ message: 'Ingrediente marcado como comprado y añadido a la despensa' });
+    res.json({ message: `${item.ingredient.name} marcado como comprado y añadido a la despensa` });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

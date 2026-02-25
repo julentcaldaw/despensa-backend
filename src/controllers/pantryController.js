@@ -42,7 +42,6 @@ export const addPantryItem = async (req, res) => {
     }
     let finalCategory = category;
     if (!finalCategory) {
-      // Buscar la categoría del ingrediente si no se envía
       const ingredient = await prisma.ingredient.findUnique({ where: { id: ingredientId } });
       if (ingredient && ingredient.category) {
         finalCategory = ingredient.category;

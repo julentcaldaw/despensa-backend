@@ -1,4 +1,3 @@
-// Obtener la categoría de un ingrediente por nombre
 export const getCategoryByIngredientName = async (req, res) => {
   const { name } = req.query;
   if (!name || typeof name !== 'string') {

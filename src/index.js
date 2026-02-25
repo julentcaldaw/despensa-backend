@@ -55,7 +55,6 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-// Opcional: Responder manualmente a preflight para máxima compatibilidad
 app.options('*', cors(corsOptions));
 
 app.use(express.json());
@@ -65,7 +64,6 @@ app.use('/api/pantry', pantryRoutes);
 app.use('/api/ingredients', ingredientRoutes);
 app.use('/api/recipes', recipeRoutes);
 app.use('/api/scanner', scannerRoutes);
-// Removed duplicate declaration of 'const app = express();'
 app.use('/api', shoppingListRoutes);
 app.use('/api/myshops', myShopsRoutes);
 

@@ -18,13 +18,12 @@ export const refreshToken = async (req, res) => {
           process.env.JWT_SECRET,
           { expiresIn: '2h' }
         );
-        // Configurar cookie segura para el token si es necesario
         const isProduction = process.env.NODE_ENV === 'production';
         res.cookie('token', token, {
           httpOnly: true,
           secure: isProduction,
           sameSite: isProduction ? 'none' : 'lax',
-          maxAge: 2 * 60 * 60 * 1000 // 2 horas
+          maxAge: 2 * 60 * 60 * 1000 
         });
         res.json({ token });
       }
@@ -136,7 +135,7 @@ export const getProfile = async (req, res) => {
     const settings = user.settings || [
       { label: "Restricciones Alimenticias", key: "restricciones", value: [] },
       { label: "Preferencias de Dieta", key: "dieta", value: "Omnívoro" },
-      { label: "Notificaciones", key: "notificaciones", value: true },
+      { label: "Notificaciones", key: "notificaciones", value: true }, //no sé si ponerlo
       { label: "Cerrar Sesión", key: "logout" }
     ];
 
