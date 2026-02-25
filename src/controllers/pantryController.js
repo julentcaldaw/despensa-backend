@@ -40,11 +40,21 @@ export const addPantryItem = async (req, res) => {
     if (exists) {
       return res.status(409).json({ error: 'Ya tienes este producto en tu despensa.' });
     }
+    let finalCategory = category;
+    if (!finalCategory) {
+      // Buscar la categoría del ingrediente si no se envía
+      const ingredient = await prisma.ingredient.findUnique({ where: { id: ingredientId } });
+      if (ingredient && ingredient.category) {
+        finalCategory = ingredient.category;
+      } else {
+        return res.status(400).json({ error: 'No se pudo determinar la categoría del ingrediente.' });
+      }
+    }
     const item = await prisma.pantry.create({
       data: {
         userId: req.user.id,
         ingredientId,
-        category: category || null
+        category: finalCategory
       }
     });
     res.status(201).json(item);

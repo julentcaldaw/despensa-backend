@@ -35,22 +35,32 @@ export const addShoppingListItem = async (req, res) => {
   if (!Array.isArray(shoppingList) || !Array.isArray(shops) || typeof filters !== 'object') {
     return res.status(400).json({ error: 'Formato de datos inválido. Debe incluir shoppingList, shops y filters.' });
   }
+  // Validación y autocompletado de categoría
+  const allowedCategories = [
+    'frutas_verduras',
+    'carnes_pescados',
+    'lacteos_huevos',
+    'despensa_granos',
+    'condimentos_aceites',
+    'snacks_extras'
+  ];
+  const allowedStatus = ['pending', 'bought', 'deleted'];
   for (const item of shoppingList) {
-    if (!item.ingredient || typeof item.ingredient !== 'string' || !item.shop || typeof item.shop !== 'string' || !item.category || typeof item.category !== 'string') {
-      return res.status(400).json({ error: 'Cada elemento debe tener ingredient, shop y category válidos.' });
+    if (!item.ingredient || typeof item.ingredient !== 'string' || !item.shop || typeof item.shop !== 'string') {
+      return res.status(400).json({ error: 'Cada elemento debe tener ingredient y shop válidos.' });
     }
-    const allowedCategories = [
-      'frutas_verduras',
-      'carnes_pescados',
-      'lacteos_huevos',
-      'despensa_granos',
-      'condimentos_aceites',
-      'snacks_extras'
-    ];
+    // Si no viene categoría, buscarla por nombre
+    if (!item.category || typeof item.category !== 'string') {
+      const found = await prisma.ingredient.findFirst({ where: { name: item.ingredient } });
+      if (found && allowedCategories.includes(found.category)) {
+        item.category = found.category;
+      } else {
+        return res.status(400).json({ error: `No se pudo determinar la categoría para el ingrediente: ${item.ingredient}` });
+      }
+    }
     if (!allowedCategories.includes(item.category)) {
       return res.status(400).json({ error: `Categoría inválida: ${item.category}` });
     }
-    const allowedStatus = ['pending', 'bought', 'deleted'];
     if (item.status && !allowedStatus.includes(item.status)) {
       return res.status(400).json({ error: `Estado inválido: ${item.status}` });
     }

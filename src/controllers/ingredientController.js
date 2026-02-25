@@ -1,3 +1,19 @@
+// Obtener la categoría de un ingrediente por nombre
+export const getCategoryByIngredientName = async (req, res) => {
+  const { name } = req.query;
+  if (!name || typeof name !== 'string') {
+    return res.status(400).json({ error: 'Falta el nombre del ingrediente.' });
+  }
+  try {
+    const ingredient = await prisma.ingredient.findFirst({ where: { name } });
+    if (!ingredient) {
+      return res.status(404).json({ error: 'Ingrediente no encontrado.' });
+    }
+    res.json({ category: ingredient.category });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 import { PrismaClient } from '../generated/prisma/index.js';
 const prisma = new PrismaClient();
 
