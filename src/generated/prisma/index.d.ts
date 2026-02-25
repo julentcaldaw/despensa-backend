@@ -52,6 +52,36 @@ export namespace $Enums {
 export type ingredient_priority = (typeof ingredient_priority)[keyof typeof ingredient_priority]
 
 
+export const diet_restriction: {
+  sin_gluten: 'sin_gluten',
+  sin_lactosa: 'sin_lactosa',
+  aplv: 'aplv',
+  frutos_secos: 'frutos_secos',
+  cacahuetes: 'cacahuetes',
+  marisco: 'marisco',
+  pescado: 'pescado',
+  huevo: 'huevo',
+  soja: 'soja',
+  sesamo: 'sesamo',
+  mostaza: 'mostaza',
+  apio: 'apio',
+  sulfitos: 'sulfitos',
+  altramuces: 'altramuces',
+  diabeticos: 'diabeticos',
+  fodmap: 'fodmap',
+  fructosa: 'fructosa',
+  histamina: 'histamina',
+  hiposodica: 'hiposodica',
+  bajo_potasio: 'bajo_potasio',
+  bajo_purinas: 'bajo_purinas',
+  bajo_residuos: 'bajo_residuos',
+  fenilcetonuria: 'fenilcetonuria',
+  astringente: 'astringente'
+};
+
+export type diet_restriction = (typeof diet_restriction)[keyof typeof diet_restriction]
+
+
 export const ingredient_category: {
   frutas_verduras: 'frutas_verduras',
   carnes_pescados: 'carnes_pescados',
@@ -68,6 +98,10 @@ export type ingredient_category = (typeof ingredient_category)[keyof typeof ingr
 export type ingredient_priority = $Enums.ingredient_priority
 
 export const ingredient_priority: typeof $Enums.ingredient_priority
+
+export type diet_restriction = $Enums.diet_restriction
+
+export const diet_restriction: typeof $Enums.diet_restriction
 
 export type ingredient_category = $Enums.ingredient_category
 
@@ -3626,6 +3660,7 @@ export namespace Prisma {
     avatar: number
     stats: number
     settings: number
+    dietRestrictions: number
     _all: number
   }
 
@@ -3665,6 +3700,7 @@ export namespace Prisma {
     avatar?: true
     stats?: true
     settings?: true
+    dietRestrictions?: true
     _all?: true
   }
 
@@ -3763,6 +3799,7 @@ export namespace Prisma {
     avatar: string | null
     stats: JsonValue | null
     settings: JsonValue | null
+    dietRestrictions: $Enums.diet_restriction[]
     _count: UserCountAggregateOutputType | null
     _avg: UserAvgAggregateOutputType | null
     _sum: UserSumAggregateOutputType | null
@@ -3793,6 +3830,7 @@ export namespace Prisma {
     avatar?: boolean
     stats?: boolean
     settings?: boolean
+    dietRestrictions?: boolean
     pantry?: boolean | user$pantryArgs<ExtArgs>
     shops?: boolean | user$shopsArgs<ExtArgs>
     shoppingList?: boolean | user$shoppingListArgs<ExtArgs>
@@ -3808,6 +3846,7 @@ export namespace Prisma {
     avatar?: boolean
     stats?: boolean
     settings?: boolean
+    dietRestrictions?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type userSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -3819,6 +3858,7 @@ export namespace Prisma {
     avatar?: boolean
     stats?: boolean
     settings?: boolean
+    dietRestrictions?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type userSelectScalar = {
@@ -3830,9 +3870,10 @@ export namespace Prisma {
     avatar?: boolean
     stats?: boolean
     settings?: boolean
+    dietRestrictions?: boolean
   }
 
-  export type userOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "username" | "email" | "password" | "refreshToken" | "avatar" | "stats" | "settings", ExtArgs["result"]["user"]>
+  export type userOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "username" | "email" | "password" | "refreshToken" | "avatar" | "stats" | "settings" | "dietRestrictions", ExtArgs["result"]["user"]>
   export type userInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     pantry?: boolean | user$pantryArgs<ExtArgs>
     shops?: boolean | user$shopsArgs<ExtArgs>
@@ -3858,6 +3899,7 @@ export namespace Prisma {
       avatar: string | null
       stats: Prisma.JsonValue | null
       settings: Prisma.JsonValue | null
+      dietRestrictions: $Enums.diet_restriction[]
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -4292,6 +4334,7 @@ export namespace Prisma {
     readonly avatar: FieldRef<"user", 'String'>
     readonly stats: FieldRef<"user", 'Json'>
     readonly settings: FieldRef<"user", 'Json'>
+    readonly dietRestrictions: FieldRef<"user", 'diet_restriction[]'>
   }
     
 
@@ -7050,7 +7093,8 @@ export namespace Prisma {
     refreshToken: 'refreshToken',
     avatar: 'avatar',
     stats: 'stats',
-    settings: 'settings'
+    settings: 'settings',
+    dietRestrictions: 'dietRestrictions'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -7175,6 +7219,20 @@ export namespace Prisma {
    * Reference to a field of type 'QueryMode'
    */
   export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+  /**
+   * Reference to a field of type 'diet_restriction[]'
+   */
+  export type ListEnumdiet_restrictionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'diet_restriction[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'diet_restriction'
+   */
+  export type Enumdiet_restrictionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'diet_restriction'>
     
 
 
@@ -7319,6 +7377,7 @@ export namespace Prisma {
     avatar?: StringNullableFilter<"user"> | string | null
     stats?: JsonNullableFilter<"user">
     settings?: JsonNullableFilter<"user">
+    dietRestrictions?: Enumdiet_restrictionNullableListFilter<"user">
     pantry?: PantryListRelationFilter
     shops?: ShopListRelationFilter
     shoppingList?: ShoppingListListRelationFilter
@@ -7333,6 +7392,7 @@ export namespace Prisma {
     avatar?: SortOrderInput | SortOrder
     stats?: SortOrderInput | SortOrder
     settings?: SortOrderInput | SortOrder
+    dietRestrictions?: SortOrder
     pantry?: pantryOrderByRelationAggregateInput
     shops?: shopOrderByRelationAggregateInput
     shoppingList?: shoppingListOrderByRelationAggregateInput
@@ -7350,6 +7410,7 @@ export namespace Prisma {
     avatar?: StringNullableFilter<"user"> | string | null
     stats?: JsonNullableFilter<"user">
     settings?: JsonNullableFilter<"user">
+    dietRestrictions?: Enumdiet_restrictionNullableListFilter<"user">
     pantry?: PantryListRelationFilter
     shops?: ShopListRelationFilter
     shoppingList?: ShoppingListListRelationFilter
@@ -7364,6 +7425,7 @@ export namespace Prisma {
     avatar?: SortOrderInput | SortOrder
     stats?: SortOrderInput | SortOrder
     settings?: SortOrderInput | SortOrder
+    dietRestrictions?: SortOrder
     _count?: userCountOrderByAggregateInput
     _avg?: userAvgOrderByAggregateInput
     _max?: userMaxOrderByAggregateInput
@@ -7383,6 +7445,7 @@ export namespace Prisma {
     avatar?: StringNullableWithAggregatesFilter<"user"> | string | null
     stats?: JsonNullableWithAggregatesFilter<"user">
     settings?: JsonNullableWithAggregatesFilter<"user">
+    dietRestrictions?: Enumdiet_restrictionNullableListFilter<"user">
   }
 
   export type shopWhereInput = {
@@ -7599,6 +7662,7 @@ export namespace Prisma {
     avatar?: string | null
     stats?: NullableJsonNullValueInput | InputJsonValue
     settings?: NullableJsonNullValueInput | InputJsonValue
+    dietRestrictions?: userCreatedietRestrictionsInput | $Enums.diet_restriction[]
     pantry?: pantryCreateNestedManyWithoutUserInput
     shops?: shopCreateNestedManyWithoutUserInput
     shoppingList?: shoppingListCreateNestedManyWithoutUserInput
@@ -7613,6 +7677,7 @@ export namespace Prisma {
     avatar?: string | null
     stats?: NullableJsonNullValueInput | InputJsonValue
     settings?: NullableJsonNullValueInput | InputJsonValue
+    dietRestrictions?: userCreatedietRestrictionsInput | $Enums.diet_restriction[]
     pantry?: pantryUncheckedCreateNestedManyWithoutUserInput
     shops?: shopUncheckedCreateNestedManyWithoutUserInput
     shoppingList?: shoppingListUncheckedCreateNestedManyWithoutUserInput
@@ -7626,6 +7691,7 @@ export namespace Prisma {
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     stats?: NullableJsonNullValueInput | InputJsonValue
     settings?: NullableJsonNullValueInput | InputJsonValue
+    dietRestrictions?: userUpdatedietRestrictionsInput | $Enums.diet_restriction[]
     pantry?: pantryUpdateManyWithoutUserNestedInput
     shops?: shopUpdateManyWithoutUserNestedInput
     shoppingList?: shoppingListUpdateManyWithoutUserNestedInput
@@ -7640,6 +7706,7 @@ export namespace Prisma {
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     stats?: NullableJsonNullValueInput | InputJsonValue
     settings?: NullableJsonNullValueInput | InputJsonValue
+    dietRestrictions?: userUpdatedietRestrictionsInput | $Enums.diet_restriction[]
     pantry?: pantryUncheckedUpdateManyWithoutUserNestedInput
     shops?: shopUncheckedUpdateManyWithoutUserNestedInput
     shoppingList?: shoppingListUncheckedUpdateManyWithoutUserNestedInput
@@ -7654,6 +7721,7 @@ export namespace Prisma {
     avatar?: string | null
     stats?: NullableJsonNullValueInput | InputJsonValue
     settings?: NullableJsonNullValueInput | InputJsonValue
+    dietRestrictions?: userCreatedietRestrictionsInput | $Enums.diet_restriction[]
   }
 
   export type userUpdateManyMutationInput = {
@@ -7664,6 +7732,7 @@ export namespace Prisma {
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     stats?: NullableJsonNullValueInput | InputJsonValue
     settings?: NullableJsonNullValueInput | InputJsonValue
+    dietRestrictions?: userUpdatedietRestrictionsInput | $Enums.diet_restriction[]
   }
 
   export type userUncheckedUpdateManyInput = {
@@ -7675,6 +7744,7 @@ export namespace Prisma {
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     stats?: NullableJsonNullValueInput | InputJsonValue
     settings?: NullableJsonNullValueInput | InputJsonValue
+    dietRestrictions?: userUpdatedietRestrictionsInput | $Enums.diet_restriction[]
   }
 
   export type shopCreateInput = {
@@ -7978,6 +8048,14 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
+  export type Enumdiet_restrictionNullableListFilter<$PrismaModel = never> = {
+    equals?: $Enums.diet_restriction[] | ListEnumdiet_restrictionFieldRefInput<$PrismaModel> | null
+    has?: $Enums.diet_restriction | Enumdiet_restrictionFieldRefInput<$PrismaModel> | null
+    hasEvery?: $Enums.diet_restriction[] | ListEnumdiet_restrictionFieldRefInput<$PrismaModel>
+    hasSome?: $Enums.diet_restriction[] | ListEnumdiet_restrictionFieldRefInput<$PrismaModel>
+    isEmpty?: boolean
+  }
+
   export type ShopListRelationFilter = {
     every?: shopWhereInput
     some?: shopWhereInput
@@ -7997,6 +8075,7 @@ export namespace Prisma {
     avatar?: SortOrder
     stats?: SortOrder
     settings?: SortOrder
+    dietRestrictions?: SortOrder
   }
 
   export type userAvgOrderByAggregateInput = {
@@ -8318,6 +8397,10 @@ export namespace Prisma {
     update?: XOR<XOR<userUpdateToOneWithWhereWithoutPantryInput, userUpdateWithoutPantryInput>, userUncheckedUpdateWithoutPantryInput>
   }
 
+  export type userCreatedietRestrictionsInput = {
+    set: $Enums.diet_restriction[]
+  }
+
   export type pantryCreateNestedManyWithoutUserInput = {
     create?: XOR<pantryCreateWithoutUserInput, pantryUncheckedCreateWithoutUserInput> | pantryCreateWithoutUserInput[] | pantryUncheckedCreateWithoutUserInput[]
     connectOrCreate?: pantryCreateOrConnectWithoutUserInput | pantryCreateOrConnectWithoutUserInput[]
@@ -8362,6 +8445,11 @@ export namespace Prisma {
 
   export type NullableStringFieldUpdateOperationsInput = {
     set?: string | null
+  }
+
+  export type userUpdatedietRestrictionsInput = {
+    set?: $Enums.diet_restriction[]
+    push?: $Enums.diet_restriction | $Enums.diet_restriction[]
   }
 
   export type pantryUpdateManyWithoutUserNestedInput = {
@@ -8874,6 +8962,7 @@ export namespace Prisma {
     avatar?: string | null
     stats?: NullableJsonNullValueInput | InputJsonValue
     settings?: NullableJsonNullValueInput | InputJsonValue
+    dietRestrictions?: userCreatedietRestrictionsInput | $Enums.diet_restriction[]
     shops?: shopCreateNestedManyWithoutUserInput
     shoppingList?: shoppingListCreateNestedManyWithoutUserInput
   }
@@ -8887,6 +8976,7 @@ export namespace Prisma {
     avatar?: string | null
     stats?: NullableJsonNullValueInput | InputJsonValue
     settings?: NullableJsonNullValueInput | InputJsonValue
+    dietRestrictions?: userCreatedietRestrictionsInput | $Enums.diet_restriction[]
     shops?: shopUncheckedCreateNestedManyWithoutUserInput
     shoppingList?: shoppingListUncheckedCreateNestedManyWithoutUserInput
   }
@@ -8939,6 +9029,7 @@ export namespace Prisma {
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     stats?: NullableJsonNullValueInput | InputJsonValue
     settings?: NullableJsonNullValueInput | InputJsonValue
+    dietRestrictions?: userUpdatedietRestrictionsInput | $Enums.diet_restriction[]
     shops?: shopUpdateManyWithoutUserNestedInput
     shoppingList?: shoppingListUpdateManyWithoutUserNestedInput
   }
@@ -8952,6 +9043,7 @@ export namespace Prisma {
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     stats?: NullableJsonNullValueInput | InputJsonValue
     settings?: NullableJsonNullValueInput | InputJsonValue
+    dietRestrictions?: userUpdatedietRestrictionsInput | $Enums.diet_restriction[]
     shops?: shopUncheckedUpdateManyWithoutUserNestedInput
     shoppingList?: shoppingListUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -9086,6 +9178,7 @@ export namespace Prisma {
     avatar?: string | null
     stats?: NullableJsonNullValueInput | InputJsonValue
     settings?: NullableJsonNullValueInput | InputJsonValue
+    dietRestrictions?: userCreatedietRestrictionsInput | $Enums.diet_restriction[]
     pantry?: pantryCreateNestedManyWithoutUserInput
     shoppingList?: shoppingListCreateNestedManyWithoutUserInput
   }
@@ -9099,6 +9192,7 @@ export namespace Prisma {
     avatar?: string | null
     stats?: NullableJsonNullValueInput | InputJsonValue
     settings?: NullableJsonNullValueInput | InputJsonValue
+    dietRestrictions?: userCreatedietRestrictionsInput | $Enums.diet_restriction[]
     pantry?: pantryUncheckedCreateNestedManyWithoutUserInput
     shoppingList?: shoppingListUncheckedCreateNestedManyWithoutUserInput
   }
@@ -9150,6 +9244,7 @@ export namespace Prisma {
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     stats?: NullableJsonNullValueInput | InputJsonValue
     settings?: NullableJsonNullValueInput | InputJsonValue
+    dietRestrictions?: userUpdatedietRestrictionsInput | $Enums.diet_restriction[]
     pantry?: pantryUpdateManyWithoutUserNestedInput
     shoppingList?: shoppingListUpdateManyWithoutUserNestedInput
   }
@@ -9163,6 +9258,7 @@ export namespace Prisma {
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     stats?: NullableJsonNullValueInput | InputJsonValue
     settings?: NullableJsonNullValueInput | InputJsonValue
+    dietRestrictions?: userUpdatedietRestrictionsInput | $Enums.diet_restriction[]
     pantry?: pantryUncheckedUpdateManyWithoutUserNestedInput
     shoppingList?: shoppingListUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -9191,6 +9287,7 @@ export namespace Prisma {
     avatar?: string | null
     stats?: NullableJsonNullValueInput | InputJsonValue
     settings?: NullableJsonNullValueInput | InputJsonValue
+    dietRestrictions?: userCreatedietRestrictionsInput | $Enums.diet_restriction[]
     pantry?: pantryCreateNestedManyWithoutUserInput
     shops?: shopCreateNestedManyWithoutUserInput
   }
@@ -9204,6 +9301,7 @@ export namespace Prisma {
     avatar?: string | null
     stats?: NullableJsonNullValueInput | InputJsonValue
     settings?: NullableJsonNullValueInput | InputJsonValue
+    dietRestrictions?: userCreatedietRestrictionsInput | $Enums.diet_restriction[]
     pantry?: pantryUncheckedCreateNestedManyWithoutUserInput
     shops?: shopUncheckedCreateNestedManyWithoutUserInput
   }
@@ -9266,6 +9364,7 @@ export namespace Prisma {
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     stats?: NullableJsonNullValueInput | InputJsonValue
     settings?: NullableJsonNullValueInput | InputJsonValue
+    dietRestrictions?: userUpdatedietRestrictionsInput | $Enums.diet_restriction[]
     pantry?: pantryUpdateManyWithoutUserNestedInput
     shops?: shopUpdateManyWithoutUserNestedInput
   }
@@ -9279,6 +9378,7 @@ export namespace Prisma {
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     stats?: NullableJsonNullValueInput | InputJsonValue
     settings?: NullableJsonNullValueInput | InputJsonValue
+    dietRestrictions?: userUpdatedietRestrictionsInput | $Enums.diet_restriction[]
     pantry?: pantryUncheckedUpdateManyWithoutUserNestedInput
     shops?: shopUncheckedUpdateManyWithoutUserNestedInput
   }

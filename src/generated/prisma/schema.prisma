@@ -37,17 +37,46 @@ model pantry {
 }
 
 model user {
-  id           Int            @id @default(autoincrement())
-  username     String
-  email        String         @unique(map: "User_email_key")
-  password     String
-  refreshToken String?
-  pantry       pantry[]
-  shops        shop[]
-  shoppingList shoppingList[]
-  avatar       String? // URL del avatar
-  stats        Json? // estadísticas del usuario
-  settings     Json? // ajustes del usuario
+  id               Int                @id @default(autoincrement())
+  username         String
+  email            String             @unique(map: "User_email_key")
+  password         String
+  refreshToken     String?
+  pantry           pantry[]
+  shops            shop[]
+  shoppingList     shoppingList[]
+  avatar           String?
+  stats            Json?
+  settings         Json?
+  dietRestrictions diet_restriction[]
+}
+
+// Enum con todas las restricciones alimentarias posibles
+enum diet_restriction {
+  sin_gluten
+  sin_lactosa
+  aplv
+  frutos_secos
+  cacahuetes
+  marisco
+  pescado
+  huevo
+  soja
+  sesamo
+  mostaza
+  apio
+  sulfitos
+  altramuces
+  diabeticos
+  fodmap
+  fructosa
+  histamina
+  hiposodica
+  bajo_potasio
+  bajo_purinas
+  bajo_residuos
+  fenilcetonuria
+  astringente
 }
 
 enum ingredient_category {

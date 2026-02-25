@@ -142,7 +142,8 @@ exports.Prisma.UserScalarFieldEnum = {
   refreshToken: 'refreshToken',
   avatar: 'avatar',
   stats: 'stats',
-  settings: 'settings'
+  settings: 'settings',
+  dietRestrictions: 'dietRestrictions'
 };
 
 exports.Prisma.ShopScalarFieldEnum = {
@@ -191,6 +192,33 @@ exports.ingredient_category = exports.$Enums.ingredient_category = {
   despensa_granos: 'despensa_granos',
   condimentos_aceites: 'condimentos_aceites',
   snacks_extras: 'snacks_extras'
+};
+
+exports.diet_restriction = exports.$Enums.diet_restriction = {
+  sin_gluten: 'sin_gluten',
+  sin_lactosa: 'sin_lactosa',
+  aplv: 'aplv',
+  frutos_secos: 'frutos_secos',
+  cacahuetes: 'cacahuetes',
+  marisco: 'marisco',
+  pescado: 'pescado',
+  huevo: 'huevo',
+  soja: 'soja',
+  sesamo: 'sesamo',
+  mostaza: 'mostaza',
+  apio: 'apio',
+  sulfitos: 'sulfitos',
+  altramuces: 'altramuces',
+  diabeticos: 'diabeticos',
+  fodmap: 'fodmap',
+  fructosa: 'fructosa',
+  histamina: 'histamina',
+  hiposodica: 'hiposodica',
+  bajo_potasio: 'bajo_potasio',
+  bajo_purinas: 'bajo_purinas',
+  bajo_residuos: 'bajo_residuos',
+  fenilcetonuria: 'fenilcetonuria',
+  astringente: 'astringente'
 };
 
 exports.Prisma.ModelName = {

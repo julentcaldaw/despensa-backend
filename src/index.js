@@ -31,6 +31,7 @@ import recipeRoutes from './routes/recipeRoutes.js';
 import scannerRoutes from './routes/scannerRoutes.js';
 import shoppingListRoutes from './routes/shoppingListRoutes.js';
 import myShopsRoutes from './routes/myShopsRoutes.js';
+import enumRoutes from './routes/enumRoutes.js';
 import cors from 'cors';
 
 // Configuración robusta de CORS compatible con Safari/iOS y móviles
@@ -60,6 +61,7 @@ app.options('*', cors(corsOptions));
 app.use(express.json());
 
 app.use('/api', userRoutes);
+app.use('/api/enum', enumRoutes);
 app.use('/api/pantry', pantryRoutes);
 app.use('/api/ingredients', ingredientRoutes);
 app.use('/api/recipes', recipeRoutes);
