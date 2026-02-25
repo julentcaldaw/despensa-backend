@@ -171,7 +171,10 @@ export const addShoppingListItem = async (req, res) => {
 export const deleteShoppingListItem = async (req, res) => {
   const { id } = req.params;
   try {
-    const item = await prisma.shoppingList.findUnique({ where: { id: Number(id) } });
+    const item = await prisma.shoppingList.findUnique({ 
+      where: { id: Number(id) },
+      include: { ingredient: true }
+    });
     if (!item) {
       return res.status(404).json({ error: 'Ingrediente no encontrado en la lista de la compra' });
     }
@@ -201,6 +204,7 @@ export const deleteShoppingListItem = async (req, res) => {
     const shoppingListGrouped = Array.from(shopMap.entries()).map(([shop, items]) => ({ shop, items }));
     res.json({ message: `${item.ingredient.name} eliminado de la lista de la compra`, shoppingList: shoppingListGrouped });
   } catch (error) {
+    console.error('Error en deleteShoppingListItem:', error);
     res.status(500).json({ error: error.message });
   }
 };
