@@ -212,50 +212,58 @@ export const deleteShoppingListItem = async (req, res) => {
 export const updateBoughtStatus = async (req, res) => {
   const { id } = req.params;
   const { bought } = req.body;
-  console.log('id recibido:', id);
-  console.log('userId autenticado:', req.user.id);
+
   if (typeof bought !== 'boolean') {
     return res.status(400).json({ error: 'El estado comprado debe ser booleano.' });
   }
   try {
-    const item = await prisma.shoppingList.findUnique({ where: { id: Number(id) } });
-    console.log('Resultado búsqueda item:', item);
-    if (!item) {
-      return res.status(404).json({ error: 'Ingrediente no encontrado en la lista de la compra' });
-    }
+
+    const item = await prisma.shoppingList.findUnique({
+      where: {
+        id: Number(id)
+      },
+      include: {
+        ingredient: true
+      }
+    }); 
+
+    console.log('HOLA, ', item)
+
+    if (!item) return res.status(404).json({ error: 'Ingrediente no encontrado en la lista' });
     if (item.userId !== req.user.id) {
-      return res.status(403).json({ error: 'No tienes permiso para modificar este ingrediente.' });
+      return res.status(403).json({ error: `No tienes permiso para modificar.` });
     }
-    const updatedItem = await prisma.shoppingList.update({
+
+    const exists = await prisma.pantry.findFirst({
+      where: {
+        userId: item.userId,
+        ingredientId: item.ingredientId
+      }
+
+    });
+
+    if (!exists) {
+      await prisma.pantry.create({
+        data: {
+          userId: item.userId,
+          ingredientId: item.ingredientId,
+          category: item.ingredient.category
+        }
+      });
+
+      return res.json({ message: `${item.ingredient.name} marcado como comprado y añadido a la despensa.` });
+    }
+
+    await prisma.shoppingList.update({
       where: { id: Number(id) },
       data: { bought }
     });
-    res.json(updatedItem);
+
+    return res.json({ message: `${item.ingredient.name} marcado como ${bought ? 'comprado' : 'pendiente'}.` });
+    
+
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
-export const markAsBought = async (req, res) => {
-  const { id } = req.params;
-  console.log('id recibido:', id);
-  console.log('userId autenticado:', req.user.id);
-  try {
-    const item = await prisma.shoppingList.findUnique({ where: { id: Number(id) } });
-    console.log('Resultado búsqueda item:', item);
-    if (!item) return res.status(404).json({ error: 'Ingrediente no encontrado en la lista' });
-    if (item.userId !== req.user.id) {
-      return res.status(403).json({ error: `No tienes permiso para modificar ${item.ingredient.name}.` });
-    }
-    await prisma.shoppingList.delete({ where: { id: Number(id) } });
-    await prisma.pantry.create({
-      data: {
-        userId: item.userId,
-        ingredientId: item.ingredientId
-      }
-    });
-    res.json({ message: `${item.ingredient.name} marcado como comprado y añadido a la despensa` });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};

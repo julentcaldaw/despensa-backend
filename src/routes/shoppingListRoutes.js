@@ -3,7 +3,6 @@ import {
   getShoppingList,
   addShoppingListItem,
   deleteShoppingListItem,
-  markAsBought,
   updateBoughtStatus
 } from '../controllers/shoppingListController.js';
 
