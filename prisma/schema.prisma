@@ -50,7 +50,6 @@ model user {
   dietRestrictions diet_restriction[]
   dietPreferences diet_preference[]
 }
-// Enum con todas las restricciones alimentarias posibles
 enum diet_restriction {
   sin_gluten
   sin_lactosa

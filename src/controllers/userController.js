@@ -141,7 +141,7 @@ export const getProfile = async (req, res) => {
     const settings = user.settings || [
       { label: "Restricciones Alimenticias", key: "restricciones", value: [] },
       { label: "Preferencias de Dieta", key: "dieta", value: "Omnívoro" },
-      { label: "Notificaciones", key: "notificaciones", value: true }, //no sé si ponerlo
+      { label: "Mis tiendas", key: "tiendas", value: [] }, 
       { label: "Cerrar Sesión", key: "logout" }
     ];
 
