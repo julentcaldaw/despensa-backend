@@ -1,15 +1,10 @@
-// Endpoint para exponer los valores del enum diet_restriction
 import express from 'express';
-import { PrismaClient } from '../generated/prisma/index.js';
 
 const router = express.Router();
-const prisma = new PrismaClient();
 
-// GET /api/enum/diet_restriction
-router.get('/diet_restriction', async (req, res) => {
-  try {
-    // Prisma no expone enums directamente, así que consultamos el esquema
-    const enumValues = [
+router.get('/diet_restriction', (req, res) => {
+  res.json({
+    values: [
       'sin_gluten',
       'sin_lactosa',
       'aplv',
@@ -34,11 +29,23 @@ router.get('/diet_restriction', async (req, res) => {
       'bajo_residuos',
       'fenilcetonuria',
       'astringente'
-    ];
-    res.json({ values: enumValues });
-  } catch (error) {
-    res.status(500).json({ error: 'No se pudo obtener el enum diet_restriction', details: error.message });
-  }
+    ]
+  });
+});
+
+router.get('/diet_preference', (req, res) => {
+  res.json({
+    values: [
+        'none',
+      'vegetarian',
+      'lacto_vegetarian',
+      'ovo_vegetarian',
+      'vegan',
+      'pescetarian',
+      'keto',
+      'paleo'
+    ]
+  });
 });
 
 export default router;

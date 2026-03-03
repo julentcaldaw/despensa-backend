@@ -250,7 +250,10 @@ export const updateBoughtStatus = async (req, res) => {
           category: item.ingredient.category
         }
       });
-
+      await prisma.shoppingList.update({
+        where: { id: Number(id) },
+        data: { bought }
+      });
       return res.json({ message: `${item.ingredient.name} marcado como comprado y añadido a la despensa.` });
     }
 

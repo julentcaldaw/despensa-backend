@@ -36,7 +36,6 @@ export const refreshToken = async (req, res) => {
 import { PrismaClient } from '../generated/prisma/index.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-// --- Restricciones alimentarias ---
 import { getDietRestrictions, saveDietRestrictions } from './DietRestrictionsController.js';
 
 // Endpoints para restricciones alimentarias reutilizables en rutas de usuario

@@ -5,9 +5,8 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 enum ingredient_priority {
@@ -49,6 +48,7 @@ model user {
   stats            Json?
   settings         Json?
   dietRestrictions diet_restriction[]
+  dietPreferences  diet_preference[]
 }
 
 // Enum con todas las restricciones alimentarias posibles
@@ -77,6 +77,17 @@ enum diet_restriction {
   bajo_residuos
   fenilcetonuria
   astringente
+}
+
+enum diet_preference {
+  none
+  vegetarian
+  lacto_vegetarian
+  ovo_vegetarian
+  vegan
+  pescetarian
+  keto
+  paleo
 }
 
 enum ingredient_category {
