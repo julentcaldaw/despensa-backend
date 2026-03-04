@@ -19,19 +19,6 @@ import enumRoutes from './routes/enumRoutes.js';
 const prisma = new PrismaClient();
 const app = express();
 
-if (process.env.NODE_ENV === 'production') {
-  app.use((req, res, next) => {
-    if (req.headers['x-forwarded-proto'] !== 'https') {
-      return res.redirect('https://' + req.headers.host + req.url);
-    }
-    next();
-  });
-}
-
-app.use((req, res, next) => {
-  req.prisma = prisma;
-  next();
-});
 
 app.use(express.json());
 
@@ -46,11 +33,18 @@ app.use('/api', shoppingListRoutes);
 app.use('/api/myshops', myShopsRoutes);
 app.use('/api/enum', enumRoutes);
 
-
-
 app.get('/', (req, res) => {
   res.send('API Despensa Backend funcionando');
 });
+
+if (process.env.NODE_ENV === 'production') {
+  app.use((req, res, next) => {
+    if (req.headers['x-forwarded-proto'] !== 'https') {
+      return res.redirect('https://' + req.headers.host + req.url);
+    }
+    next();
+  });
+}
 
 const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT, () => {
