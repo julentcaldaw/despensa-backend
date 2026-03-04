@@ -4860,18 +4860,21 @@ export namespace Prisma {
   export type ShopMinAggregateOutputType = {
     id: number | null
     name: string | null
+    name_normalized: string | null
     userId: number | null
   }
 
   export type ShopMaxAggregateOutputType = {
     id: number | null
     name: string | null
+    name_normalized: string | null
     userId: number | null
   }
 
   export type ShopCountAggregateOutputType = {
     id: number
     name: number
+    name_normalized: number
     userId: number
     _all: number
   }
@@ -4890,18 +4893,21 @@ export namespace Prisma {
   export type ShopMinAggregateInputType = {
     id?: true
     name?: true
+    name_normalized?: true
     userId?: true
   }
 
   export type ShopMaxAggregateInputType = {
     id?: true
     name?: true
+    name_normalized?: true
     userId?: true
   }
 
   export type ShopCountAggregateInputType = {
     id?: true
     name?: true
+    name_normalized?: true
     userId?: true
     _all?: true
   }
@@ -4995,6 +5001,7 @@ export namespace Prisma {
   export type ShopGroupByOutputType = {
     id: number
     name: string
+    name_normalized: string | null
     userId: number
     _count: ShopCountAggregateOutputType | null
     _avg: ShopAvgAggregateOutputType | null
@@ -5020,6 +5027,7 @@ export namespace Prisma {
   export type shopSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    name_normalized?: boolean
     userId?: boolean
     user?: boolean | userDefaultArgs<ExtArgs>
     shoppingList?: boolean | shop$shoppingListArgs<ExtArgs>
@@ -5029,6 +5037,7 @@ export namespace Prisma {
   export type shopSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    name_normalized?: boolean
     userId?: boolean
     user?: boolean | userDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["shop"]>
@@ -5036,6 +5045,7 @@ export namespace Prisma {
   export type shopSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    name_normalized?: boolean
     userId?: boolean
     user?: boolean | userDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["shop"]>
@@ -5043,10 +5053,11 @@ export namespace Prisma {
   export type shopSelectScalar = {
     id?: boolean
     name?: boolean
+    name_normalized?: boolean
     userId?: boolean
   }
 
-  export type shopOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "userId", ExtArgs["result"]["shop"]>
+  export type shopOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "name_normalized" | "userId", ExtArgs["result"]["shop"]>
   export type shopInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | userDefaultArgs<ExtArgs>
     shoppingList?: boolean | shop$shoppingListArgs<ExtArgs>
@@ -5068,6 +5079,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: number
       name: string
+      name_normalized: string | null
       userId: number
     }, ExtArgs["result"]["shop"]>
     composites: {}
@@ -5496,6 +5508,7 @@ export namespace Prisma {
   interface shopFieldRefs {
     readonly id: FieldRef<"shop", 'Int'>
     readonly name: FieldRef<"shop", 'String'>
+    readonly name_normalized: FieldRef<"shop", 'String'>
     readonly userId: FieldRef<"shop", 'Int'>
   }
     
@@ -7126,6 +7139,7 @@ export namespace Prisma {
   export const ShopScalarFieldEnum: {
     id: 'id',
     name: 'name',
+    name_normalized: 'name_normalized',
     userId: 'userId'
   };
 
@@ -7496,6 +7510,7 @@ export namespace Prisma {
     NOT?: shopWhereInput | shopWhereInput[]
     id?: IntFilter<"shop"> | number
     name?: StringFilter<"shop"> | string
+    name_normalized?: StringNullableFilter<"shop"> | string | null
     userId?: IntFilter<"shop"> | number
     user?: XOR<UserScalarRelationFilter, userWhereInput>
     shoppingList?: ShoppingListListRelationFilter
@@ -7504,6 +7519,7 @@ export namespace Prisma {
   export type shopOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
+    name_normalized?: SortOrderInput | SortOrder
     userId?: SortOrder
     user?: userOrderByWithRelationInput
     shoppingList?: shoppingListOrderByRelationAggregateInput
@@ -7511,19 +7527,21 @@ export namespace Prisma {
 
   export type shopWhereUniqueInput = Prisma.AtLeast<{
     id?: number
-    userId_name?: shopUserIdNameCompoundUniqueInput
+    userId_name_normalized?: shopUserIdName_normalizedCompoundUniqueInput
     AND?: shopWhereInput | shopWhereInput[]
     OR?: shopWhereInput[]
     NOT?: shopWhereInput | shopWhereInput[]
     name?: StringFilter<"shop"> | string
+    name_normalized?: StringNullableFilter<"shop"> | string | null
     userId?: IntFilter<"shop"> | number
     user?: XOR<UserScalarRelationFilter, userWhereInput>
     shoppingList?: ShoppingListListRelationFilter
-  }, "id" | "userId_name">
+  }, "id" | "userId_name_normalized">
 
   export type shopOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
+    name_normalized?: SortOrderInput | SortOrder
     userId?: SortOrder
     _count?: shopCountOrderByAggregateInput
     _avg?: shopAvgOrderByAggregateInput
@@ -7538,6 +7556,7 @@ export namespace Prisma {
     NOT?: shopScalarWhereWithAggregatesInput | shopScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"shop"> | number
     name?: StringWithAggregatesFilter<"shop"> | string
+    name_normalized?: StringNullableWithAggregatesFilter<"shop"> | string | null
     userId?: IntWithAggregatesFilter<"shop"> | number
   }
 
@@ -7798,6 +7817,7 @@ export namespace Prisma {
 
   export type shopCreateInput = {
     name: string
+    name_normalized?: string | null
     user: userCreateNestedOneWithoutShopsInput
     shoppingList?: shoppingListCreateNestedManyWithoutShopInput
   }
@@ -7805,12 +7825,14 @@ export namespace Prisma {
   export type shopUncheckedCreateInput = {
     id?: number
     name: string
+    name_normalized?: string | null
     userId: number
     shoppingList?: shoppingListUncheckedCreateNestedManyWithoutShopInput
   }
 
   export type shopUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
+    name_normalized?: NullableStringFieldUpdateOperationsInput | string | null
     user?: userUpdateOneRequiredWithoutShopsNestedInput
     shoppingList?: shoppingListUpdateManyWithoutShopNestedInput
   }
@@ -7818,6 +7840,7 @@ export namespace Prisma {
   export type shopUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
+    name_normalized?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: IntFieldUpdateOperationsInput | number
     shoppingList?: shoppingListUncheckedUpdateManyWithoutShopNestedInput
   }
@@ -7825,16 +7848,19 @@ export namespace Prisma {
   export type shopCreateManyInput = {
     id?: number
     name: string
+    name_normalized?: string | null
     userId: number
   }
 
   export type shopUpdateManyMutationInput = {
     name?: StringFieldUpdateOperationsInput | string
+    name_normalized?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type shopUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
+    name_normalized?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: IntFieldUpdateOperationsInput | number
   }
 
@@ -8206,14 +8232,15 @@ export namespace Prisma {
     _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
-  export type shopUserIdNameCompoundUniqueInput = {
+  export type shopUserIdName_normalizedCompoundUniqueInput = {
     userId: number
-    name: string
+    name_normalized: string
   }
 
   export type shopCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    name_normalized?: SortOrder
     userId?: SortOrder
   }
 
@@ -8225,12 +8252,14 @@ export namespace Prisma {
   export type shopMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    name_normalized?: SortOrder
     userId?: SortOrder
   }
 
   export type shopMinOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    name_normalized?: SortOrder
     userId?: SortOrder
   }
 
@@ -9142,12 +9171,14 @@ export namespace Prisma {
 
   export type shopCreateWithoutUserInput = {
     name: string
+    name_normalized?: string | null
     shoppingList?: shoppingListCreateNestedManyWithoutShopInput
   }
 
   export type shopUncheckedCreateWithoutUserInput = {
     id?: number
     name: string
+    name_normalized?: string | null
     shoppingList?: shoppingListUncheckedCreateNestedManyWithoutShopInput
   }
 
@@ -9222,6 +9253,7 @@ export namespace Prisma {
     NOT?: shopScalarWhereInput | shopScalarWhereInput[]
     id?: IntFilter<"shop"> | number
     name?: StringFilter<"shop"> | string
+    name_normalized?: StringNullableFilter<"shop"> | string | null
     userId?: IntFilter<"shop"> | number
   }
 
@@ -9408,12 +9440,14 @@ export namespace Prisma {
 
   export type shopCreateWithoutShoppingListInput = {
     name: string
+    name_normalized?: string | null
     user: userCreateNestedOneWithoutShopsInput
   }
 
   export type shopUncheckedCreateWithoutShoppingListInput = {
     id?: number
     name: string
+    name_normalized?: string | null
     userId: number
   }
 
@@ -9499,12 +9533,14 @@ export namespace Prisma {
 
   export type shopUpdateWithoutShoppingListInput = {
     name?: StringFieldUpdateOperationsInput | string
+    name_normalized?: NullableStringFieldUpdateOperationsInput | string | null
     user?: userUpdateOneRequiredWithoutShopsNestedInput
   }
 
   export type shopUncheckedUpdateWithoutShoppingListInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
+    name_normalized?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: IntFieldUpdateOperationsInput | number
   }
 
@@ -9567,6 +9603,7 @@ export namespace Prisma {
   export type shopCreateManyUserInput = {
     id?: number
     name: string
+    name_normalized?: string | null
   }
 
   export type shoppingListCreateManyUserInput = {
@@ -9595,18 +9632,21 @@ export namespace Prisma {
 
   export type shopUpdateWithoutUserInput = {
     name?: StringFieldUpdateOperationsInput | string
+    name_normalized?: NullableStringFieldUpdateOperationsInput | string | null
     shoppingList?: shoppingListUpdateManyWithoutShopNestedInput
   }
 
   export type shopUncheckedUpdateWithoutUserInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
+    name_normalized?: NullableStringFieldUpdateOperationsInput | string | null
     shoppingList?: shoppingListUncheckedUpdateManyWithoutShopNestedInput
   }
 
   export type shopUncheckedUpdateManyWithoutUserInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
+    name_normalized?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type shoppingListUpdateWithoutUserInput = {

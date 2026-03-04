@@ -26,11 +26,11 @@ export const addShop = async (req, res) => {
   }
   const normalizedName = normalizeShopName(name);
   try {
-    const exists = await prisma.shop.findFirst({ where: { userId: req.user.id, name: normalizedName } });
+    const exists = await prisma.shop.findFirst({ where: { userId: req.user.id, name_normalized: normalizedName } });
     if (exists) {
       return res.status(409).json({ error: 'Ya tienes una tienda con ese nombre.' });
     }
-    await prisma.shop.create({ data: { userId: req.user.id, name: normalizedName } });
+    await prisma.shop.create({ data: { userId: req.user.id, name: name, name_normalized: normalizedName } });
     const shops = await prisma.shop.findMany({ where: { userId: req.user.id } });
     res.status(201).json(shops);
   } catch (error) {

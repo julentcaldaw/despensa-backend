@@ -149,6 +149,7 @@ exports.Prisma.UserScalarFieldEnum = {
 exports.Prisma.ShopScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  name_normalized: 'name_normalized',
   userId: 'userId'
 };
 

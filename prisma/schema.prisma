@@ -101,10 +101,11 @@ enum ingredient_category {
 model shop {
   id     Int    @id @default(autoincrement())
   name   String
+  name_normalized String?
   userId Int
   user   user   @relation(fields: [userId], references: [id])
   shoppingList shoppingList[]
-  @@unique([userId, name])
+  @@unique([userId, name_normalized])
 }
 
 model shoppingList {

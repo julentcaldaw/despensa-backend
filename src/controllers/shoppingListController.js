@@ -254,15 +254,56 @@ export const updateBoughtStatus = async (req, res) => {
         where: { id: Number(id) },
         data: { bought }
       });
-      return res.json({ message: `${item.ingredient.name} marcado como comprado y añadido a la despensa.` });
+      // Devuelve la lista actualizada
+      const items = await prisma.shoppingList.findMany({
+        where: { userId: req.user.id },
+        include: {
+          ingredient: { select: { id: true, name: true, category: true } },
+          shop: { select: { id: true, name: true } }
+        }
+      });
+      const shopMap = new Map();
+      items.forEach(item => {
+        const shopKey = item.shop ? item.shop.name : 'Sin tienda';
+        if (!shopMap.has(shopKey)) shopMap.set(shopKey, []);
+        shopMap.get(shopKey).push({
+          id: item.id,
+          ingredientId: item.ingredient.id,
+          name: item.ingredient.name,
+          category: item.ingredient.category,
+          bought: item.bought || false
+        });
+      });
+      const shoppingListGrouped = Array.from(shopMap.entries()).map(([shop, items]) => ({ shop, items }));
+      return res.json({ message: `${item.ingredient.name} marcado como comprado y añadido a la despensa.`, shoppingList: shoppingListGrouped });
     }
 
     await prisma.shoppingList.update({
       where: { id: Number(id) },
       data: { bought }
     });
-
-    return res.json({ message: `${item.ingredient.name} marcado como ${bought ? 'comprado' : 'pendiente'}.` });
+    // Devuelve la lista actualizada
+    const items = await prisma.shoppingList.findMany({
+      where: { userId: req.user.id },
+      include: {
+        ingredient: { select: { id: true, name: true, category: true } },
+        shop: { select: { id: true, name: true } }
+      }
+    });
+    const shopMap = new Map();
+    items.forEach(item => {
+      const shopKey = item.shop ? item.shop.name : 'Sin tienda';
+      if (!shopMap.has(shopKey)) shopMap.set(shopKey, []);
+      shopMap.get(shopKey).push({
+        id: item.id,
+        ingredientId: item.ingredient.id,
+        name: item.ingredient.name,
+        category: item.ingredient.category,
+        bought: item.bought || false
+      });
+    });
+    const shoppingListGrouped = Array.from(shopMap.entries()).map(([shop, items]) => ({ shop, items }));
+    return res.json({ message: `${item.ingredient.name} marcado como ${bought ? 'comprado' : 'pendiente'}.`, shoppingList: shoppingListGrouped });
     
 
   } catch (error) {
