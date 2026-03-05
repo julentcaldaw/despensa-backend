@@ -53,4 +53,43 @@ npx prisma generate
 ## Autenticación
 - JWT en header Authorization
 
+# Cambios recientes y mejoras
+
+## Integración Edamam
+- El backend ahora utiliza la API de Edamam para obtener recetas.
+- Las credenciales de Edamam se gestionan por variables de entorno: `EDAMAM_APP_ID`, `EDAMAM_API_KEY`, `EDAMAM_ACCOUNT_USER`.
+- El backend traduce automáticamente los ingredientes al inglés usando Google Translate API y una tabla de equivalencias manual para mejorar la precisión.
+- El frontend nunca llama directamente a Edamam, evitando problemas de CORS.
+
+## Endpoints de recetas
+- `/api/recipes/desde-lista` (POST): Recibe una lista de ingredientes y un parámetro opcional `maxTime` (minutos). Devuelve recetas que contengan cualquiera de los ingredientes (lógica OR) y filtra por tiempo si se especifica.
+- `/api/recipes/desde-despensa` (POST): Recibe el token del usuario, obtiene los ingredientes de la despensa y devuelve recetas usando la misma lógica de traducción y filtrado.
+
+## Filtro por tiempo
+- El backend filtra recetas por tiempo de elaboración (`totalTime` en minutos) si se envía el parámetro `maxTime`.
+- Si una receta no tiene información de tiempo (`totalTime = 0`), igual se incluye en los resultados para no perder opciones.
+
+## Traducción de ingredientes
+- Traducción automática con Google Translate API.
+- Tabla de equivalencias manual para ingredientes comunes en español.
+
+## Seguridad y buenas prácticas
+- Todas las credenciales y claves API se gestionan por `.env`.
+- El backend valida los parámetros recibidos y responde con errores claros si faltan datos.
+- JWT obligatorio para endpoints protegidos.
+
+## Ejemplo de uso de endpoint de recetas
+```json
+POST /api/recipes/desde-lista
+{
+  "ingredients": ["tomate", "ajo", "pollo"],
+  "maxTime": 30
+}
+```
+
+## Notas adicionales
+- El backend deduplica recetas para evitar resultados repetidos.
+- El filtro por tiempo solo afecta recetas con tiempo conocido, pero no excluye las que no lo tienen.
+- El sistema está preparado para ampliarse con más equivalencias o mejoras de traducción.
+
 ---
