@@ -13,6 +13,7 @@ router.get('/', (req, res) => {
 });
 
 router.get('/desde-despensa', authenticateToken, getRecipesFromPantry);
+router.post('/desde-despensa', authenticateToken, getRecipesFromPantry);
 router.post('/desde-lista', authenticateToken, getRecipesFromList);
 
 export default router;

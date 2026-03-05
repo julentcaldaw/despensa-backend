@@ -22,6 +22,13 @@ CORS_ORIGINS=https://despensa-frontend-dc3k.onrender.com,http://localhost:5050
 
 En Render, configura la variable de entorno `CORS_ORIGINS` para incluir los orígenes que necesites (por ejemplo, solo el frontend en producción o también localhost para pruebas temporales).
 
+## Variables de entorno para recetas Edamam
+Agrega estas variables en tu archivo `.env`:
+```
+EDAMAM_APP_ID=tu_app_id
+EDAMAM_API_KEY=tu_api_key
+```
+
 ## Migraciones y Prisma
 ```bash
 npx prisma migrate dev --name init
