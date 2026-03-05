@@ -1,4 +1,3 @@
-// Script para mostrar los nombres exactos de las tiendas del usuario 1
 import { PrismaClient } from '../src/generated/prisma/index.js';
 const prisma = new PrismaClient();
 
@@ -13,4 +12,4 @@ async function showUserShops(userId) {
   }
 }
 
-showUserShops(1); // Cambia el id si es necesario
+showUserShops(1); 

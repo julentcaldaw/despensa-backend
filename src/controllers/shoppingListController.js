@@ -254,7 +254,6 @@ export const updateBoughtStatus = async (req, res) => {
         where: { id: Number(id) },
         data: { bought }
       });
-      // Devuelve la lista actualizada
       const items = await prisma.shoppingList.findMany({
         where: { userId: req.user.id },
         include: {
@@ -282,7 +281,6 @@ export const updateBoughtStatus = async (req, res) => {
       where: { id: Number(id) },
       data: { bought }
     });
-    // Devuelve la lista actualizada
     const items = await prisma.shoppingList.findMany({
       where: { userId: req.user.id },
       include: {

@@ -38,7 +38,6 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { getDietRestrictions, saveDietRestrictions } from './DietRestrictionsController.js';
 
-// Endpoints para restricciones alimentarias reutilizables en rutas de usuario
 export const getUserDietRestrictions = getDietRestrictions;
 export const saveUserDietRestrictions = saveDietRestrictions;
 
@@ -162,7 +161,6 @@ export const getProfile = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-
 
 export const updateProfile = async (req, res) => {
   const { name, email, avatar, settings } = req.body;

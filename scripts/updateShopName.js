@@ -1,4 +1,3 @@
-// Script para actualizar el nombre de la tienda 'Deza' a 'deza' para el usuario 1
 import { PrismaClient } from '../src/generated/prisma/index.js';
 const prisma = new PrismaClient();
 

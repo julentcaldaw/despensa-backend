@@ -1,4 +1,3 @@
-// Script para normalizar los nombres de las tiendas existentes en la base de datos
 import { PrismaClient } from '../src/generated/prisma/index.js';
 const prisma = new PrismaClient();
 

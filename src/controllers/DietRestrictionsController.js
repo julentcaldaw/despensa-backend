@@ -25,11 +25,9 @@ export const saveDietRestrictions = async (req, res) => {
     console.log('DEBUG saveDietRestrictions req.body:', req.body);
     const userId = req.user.id;
     const { restrictions } = req.body;
-    // Validación básica
     if (!Array.isArray(restrictions)) {
       return res.status(400).json({ message: 'Las restricciones deben ser un array.' });
     }
-    // Solo el usuario autenticado puede modificar sus restricciones
     if (parseInt(userId) !== parseInt(req.user.id)) {
       return res.status(403).json({ message: 'No autorizado para modificar estas restricciones.' });
     }

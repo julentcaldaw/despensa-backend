@@ -94,6 +94,6 @@ async function fetchEdamamRecipes(ingredientsStr) {
     ingredients: hit.recipe.ingredientLines,
     url: hit.recipe.url,
     source: hit.recipe.source,
-    totalTime: hit.recipe.totalTime // minutos
+    totalTime: hit.recipe.totalTime 
   }));
 }
