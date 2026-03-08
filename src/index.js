@@ -19,6 +19,12 @@ import enumRoutes from './routes/enumRoutes.js';
 const prisma = new PrismaClient();
 const app = express();
 
+app.use(cors({
+  origin: process.env.CORS_ORIGINS.split(','),
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+}));
 
 app.use(express.json());
 
