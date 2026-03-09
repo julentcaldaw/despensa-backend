@@ -1,5 +1,7 @@
 import dotenv from 'dotenv';
-dotenv.config();
+if (process.env.NODE_ENV !== 'production') {
+  dotenv.config({ path: '.env.local' });
+}
 console.log('DEBUG JWT_SECRET:', process.env.JWT_SECRET);
 
 import express from 'express';
