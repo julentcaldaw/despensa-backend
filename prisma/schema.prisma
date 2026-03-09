@@ -1,12 +1,11 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
   binaryTargets = ["native", "debian-openssl-3.0.x"]
 }
 
 datasource db {
   provider = "postgresql"
-    url = env("DATABASE_URL")
+  url = env("DATABASE_URL")
 }
 
 enum ingredient_priority {
@@ -21,6 +20,7 @@ model ingredient {
   category ingredient_category?
   pantry   pantry[]
   shoppingList shoppingList[]
+  ingredients RecipeIngredient[]
 }
 
 model pantry {
@@ -122,3 +122,29 @@ model shoppingList {
   @@index([shopId])
   @@unique([userId, ingredientId])
 }
+
+model Recipe {
+  id                Int                @id @default(autoincrement())
+  name              String
+  description       String?
+  preparationSteps  String[]           
+  preparationTime   Int?               
+  dietRestrictions  diet_restriction[] 
+  dietPreferences   diet_preference[]  
+  nutritionInfo     Json?              
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  ingredients       RecipeIngredient[]
+}
+
+model RecipeIngredient {
+  id           Int        @id @default(autoincrement())
+  recipeId     Int
+  ingredientId Int
+  quantity     Float?     
+  unit         String?    
+  recipe       Recipe     @relation(fields: [recipeId], references: [id])
+  ingredient   ingredient @relation(fields: [ingredientId], references: [id])
+  @@unique([recipeId, ingredientId])
+}
+

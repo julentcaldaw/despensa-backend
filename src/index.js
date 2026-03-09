@@ -16,6 +16,8 @@ import myShopsRoutes from './routes/myShopsRoutes.js';
 import cors from 'cors';
 import enumRoutes from './routes/enumRoutes.js';
 
+import recipeDetailRoutes from './routes/recipeDetailRoutes.js';
+
 const prisma = new PrismaClient();
 const app = express();
 
@@ -34,6 +36,7 @@ app.use('/api/usuario/preferencias', dietPreferencesRoutes);
 app.use('/api/pantry', pantryRoutes);
 app.use('/api/ingredients', ingredientRoutes);
 app.use('/api/recipes', recipeRoutes);
+app.use('/api/recipe-detail', recipeDetailRoutes);
 app.use('/api/scanner', scannerRoutes);
 app.use('/api', shoppingListRoutes);
 app.use('/api/myshops', myShopsRoutes);

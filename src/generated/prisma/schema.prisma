@@ -21,6 +21,7 @@ model ingredient {
   category     ingredient_category?
   pantry       pantry[]
   shoppingList shoppingList[]
+  ingredients  RecipeIngredient[]
 }
 
 model pantry {
@@ -51,7 +52,6 @@ model user {
   dietPreferences  diet_preference[]
 }
 
-// Enum con todas las restricciones alimentarias posibles
 enum diet_restriction {
   sin_gluten
   sin_lactosa
@@ -100,13 +100,14 @@ enum ingredient_category {
 }
 
 model shop {
-  id           Int            @id @default(autoincrement())
-  name         String
-  userId       Int
-  user         user           @relation(fields: [userId], references: [id])
-  shoppingList shoppingList[]
+  id              Int            @id @default(autoincrement())
+  name            String
+  name_normalized String?
+  userId          Int
+  user            user           @relation(fields: [userId], references: [id])
+  shoppingList    shoppingList[]
 
-  @@unique([userId, name])
+  @@unique([userId, name_normalized])
 }
 
 model shoppingList {
@@ -123,4 +124,30 @@ model shoppingList {
   @@index([userId])
   @@index([ingredientId])
   @@index([shopId])
+}
+
+model Recipe {
+  id               Int                @id @default(autoincrement())
+  name             String
+  description      String?
+  preparationSteps String[]
+  preparationTime  Int?
+  dietRestrictions diet_restriction[]
+  dietPreferences  diet_preference[]
+  nutritionInfo    Json?
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  ingredients      RecipeIngredient[]
+}
+
+model RecipeIngredient {
+  id           Int        @id @default(autoincrement())
+  recipeId     Int
+  ingredientId Int
+  quantity     Float?
+  unit         String?
+  recipe       Recipe     @relation(fields: [recipeId], references: [id])
+  ingredient   ingredient @relation(fields: [ingredientId], references: [id])
+
+  @@unique([recipeId, ingredientId])
 }

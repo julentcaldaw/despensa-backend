@@ -20,12 +20,12 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 6.15.0
- * Query Engine version: 85179d7826409ee107a6ba334b5e305ae3fba9fb
+ * Prisma Client JS version: 6.7.0
+ * Query Engine version: 3cff47a7f5d65c3ea74883f1d736e41d68ce91ed
  */
 Prisma.prismaVersion = {
-  client: "6.15.0",
-  engine: "85179d7826409ee107a6ba334b5e305ae3fba9fb"
+  client: "6.7.0",
+  engine: "3cff47a7f5d65c3ea74883f1d736e41d68ce91ed"
 }
 
 Prisma.PrismaClientKnownRequestError = () => {
@@ -161,6 +161,27 @@ exports.Prisma.ShoppingListScalarFieldEnum = {
   bought: 'bought'
 };
 
+exports.Prisma.RecipeScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  preparationSteps: 'preparationSteps',
+  preparationTime: 'preparationTime',
+  dietRestrictions: 'dietRestrictions',
+  dietPreferences: 'dietPreferences',
+  nutritionInfo: 'nutritionInfo',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.RecipeIngredientScalarFieldEnum = {
+  id: 'id',
+  recipeId: 'recipeId',
+  ingredientId: 'ingredientId',
+  quantity: 'quantity',
+  unit: 'unit'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -238,7 +259,9 @@ exports.Prisma.ModelName = {
   pantry: 'pantry',
   user: 'user',
   shop: 'shop',
-  shoppingList: 'shoppingList'
+  shoppingList: 'shoppingList',
+  Recipe: 'Recipe',
+  RecipeIngredient: 'RecipeIngredient'
 };
 
 /**
