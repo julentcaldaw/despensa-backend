@@ -1,5 +1,11 @@
 # Despensa Backend (Node.js + Express + Prisma)
 
+## Dependencias principales
+- **Express**: Framework principal para el backend (se instala automáticamente con `npm install`).
+- **Node.js**: Requisito para ejecutar el backend (verifica que esté instalado en tu sistema).
+
+> Al ejecutar `npm install`, se instalarán todas las dependencias necesarias, incluyendo Express, Prisma, dotenv, JWT, etc.
+
 ## Requisitos
 - Node.js >= 18
 - MySQL
