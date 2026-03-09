@@ -89,13 +89,11 @@ npx prisma generate
 POST /api/recipes/desde-lista
 {
   "ingredients": ["tomate", "ajo", "pollo"],
-  "maxTime": 30
 }
 ```
 
 ## Notas adicionales
 - El backend deduplica recetas para evitar resultados repetidos.
-- El filtro por tiempo solo afecta recetas con tiempo conocido, pero no excluye las que no lo tienen.
 - El sistema está preparado para ampliarse con más equivalencias o mejoras de traducción.
 
 ---
