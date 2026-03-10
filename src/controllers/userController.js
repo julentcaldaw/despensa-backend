@@ -33,7 +33,7 @@ export const refreshToken = async (req, res) => {
   }
 };
 
-import { PrismaClient } from '../generated/prisma/index.js';
+import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { getDietRestrictions, saveDietRestrictions } from './DietRestrictionsController.js';
@@ -127,35 +127,20 @@ export const getProfile = async (req, res) => {
     const user = await prisma.user.findUnique({ where: { id: req.user.id } });
     if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
 
-
     const shoppingListCount = await prisma.shoppingList.count({ where: { userId: req.user.id } });
     const pantryCount = await prisma.pantry.count({ where: { userId: req.user.id } });
-
-    const stats = user.stats || {
-      recetasGuardadas: 0,
-      itemsDespensa: 0,
-      aportaciones: 0
-    };
-
-    const settings = user.settings || [
-      { label: "Restricciones Alimenticias", key: "restricciones", value: [] },
-      { label: "Preferencias de Dieta", key: "dieta", value: "Omnívoro" },
-      { label: "Mis tiendas", key: "tiendas", value: [] }, 
-      { label: "Cerrar Sesión", key: "logout" }
-    ];
 
     let avatar = user.avatar;
     if (!avatar || typeof avatar !== 'string' || avatar.trim() === '') {
       avatar = 'avatar.jpg';
     }
     res.json({
+      id: user.id,
       name: user.username,
       email: user.email,
       avatar,
-      stats,
       shoppingListCount,
-      pantryCount,
-      settings
+      pantryCount
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -163,7 +148,7 @@ export const getProfile = async (req, res) => {
 };
 
 export const updateProfile = async (req, res) => {
-  const { name, email, avatar, settings } = req.body;
+  const { name, email, avatar } = req.body;
   try {
     if (email && typeof email !== 'string') return res.status(400).json({ error: 'Email inválido' });
     if (name && typeof name !== 'string') return res.status(400).json({ error: 'Nombre inválido' });
@@ -173,29 +158,18 @@ export const updateProfile = async (req, res) => {
       data: {
         username: name,
         email,
-        avatar,
-        settings
+        avatar
       }
     });
     res.json({
       id: updated.id,
       name: updated.username,
       email: updated.email,
-      avatar: updated.avatar,
-      stats: updated.stats,
-      settings: updated.settings
+      avatar: updated.avatar
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
-export const getUserStats = async (req, res) => {
-  try {
-    const user = await prisma.user.findUnique({ where: { id: req.user.id } });
-    if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
-    res.json(user.stats || {});
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
+// getUserStats eliminado: stats ya no existe en el modelo user

@@ -1,4 +1,5 @@
-import { PrismaClient } from '../generated/prisma/index.js';
+import { PrismaClient } from '@prisma/client';
+import { normalizeName } from '../utils/normalize.js';
 const prisma = new PrismaClient();
 
 function normalizeShopName(name) {
@@ -26,11 +27,11 @@ export const addShop = async (req, res) => {
   }
   const normalizedName = normalizeShopName(name);
   try {
-    const exists = await prisma.shop.findFirst({ where: { userId: req.user.id, name_normalized: normalizedName } });
+    const exists = await prisma.shop.findFirst({ where: { userId: req.user.id, name_normalized: normalizeName(name) } });
     if (exists) {
       return res.status(409).json({ error: 'Ya tienes una tienda con ese nombre.' });
     }
-    await prisma.shop.create({ data: { userId: req.user.id, name: name, name_normalized: normalizedName } });
+    await prisma.shop.create({ data: { userId: req.user.id, name: name, name_normalized: normalizeName(name) } });
     const shops = await prisma.shop.findMany({ where: { userId: req.user.id } });
     res.status(201).json(shops);
   } catch (error) {
@@ -43,10 +44,10 @@ export const deleteShop = async (req, res) => {
   if (!shopName || typeof shopName !== 'string' || shopName.trim() === '') {
     return res.status(400).json({ error: 'El nombre de la tienda es requerido en la URL.' });
   }
-  const normalizedName = normalizeShopName(shopName);
+  const normalizedName = normalizeName(shopName);
   console.log('Intentando eliminar tienda:', normalizedName, 'para usuario:', req.user.id);
   try {
-    const shop = await prisma.shop.findFirst({ where: { userId: req.user.id, name: normalizedName } });
+    const shop = await prisma.shop.findFirst({ where: { userId: req.user.id, name_normalized: normalizedName } });
     console.log('Resultado búsqueda tienda:', shop);
     if (!shop) {
       return res.status(404).json({ error: 'Tienda no encontrada.' });

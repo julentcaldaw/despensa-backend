@@ -1,4 +1,4 @@
-import { PrismaClient } from '../generated/prisma/index.js';
+import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export const getPantry = async (req, res) => {
@@ -17,7 +17,7 @@ export const getPantry = async (req, res) => {
     const response = items.map(item => ({
       id: item.id,
       name: item.ingredient?.name,
-      category: item.category
+      category: item.ingredient?.category
     }));
     res.json(response);
   } catch (error) {
@@ -26,7 +26,7 @@ export const getPantry = async (req, res) => {
 };
 
 export const addPantryItem = async (req, res) => {
-  const { ingredientId, category } = req.body;
+  const { ingredientId } = req.body;
   if (!ingredientId) {
     return res.status(400).json({ error: 'Falta el id del ingrediente' });
   }
@@ -40,20 +40,10 @@ export const addPantryItem = async (req, res) => {
     if (exists) {
       return res.status(409).json({ error: 'Ya tienes este producto en tu despensa.' });
     }
-    let finalCategory = category;
-    if (!finalCategory) {
-      const ingredient = await prisma.ingredient.findUnique({ where: { id: ingredientId } });
-      if (ingredient && ingredient.category) {
-        finalCategory = ingredient.category;
-      } else {
-        return res.status(400).json({ error: 'No se pudo determinar la categoría del ingrediente.' });
-      }
-    }
     const item = await prisma.pantry.create({
       data: {
         userId: req.user.id,
-        ingredientId,
-        category: finalCategory
+        ingredientId
       }
     });
     res.status(201).json(item);

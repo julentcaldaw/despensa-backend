@@ -1,5 +1,5 @@
 import express from 'express';
-import { register, login, getProfile, refreshToken, updateProfile, getUserStats, getUserDietRestrictions, saveUserDietRestrictions } from '../controllers/userController.js';
+import { register, login, getProfile, refreshToken, updateProfile, getUserDietRestrictions, saveUserDietRestrictions } from '../controllers/userController.js';
 import { getDietPreferences, saveDietPreferences } from '../controllers/DietPreferencesController.js';
 import { authenticateToken } from '../middlewares/auth.js';
 
@@ -19,7 +19,7 @@ router.post('/usuario/restricciones', authenticateToken, saveUserDietRestriction
 router.get('/usuario/preferencias', authenticateToken, getDietPreferences);
 router.post('/usuario/preferencias', authenticateToken, saveDietPreferences);
 
-router.get('/usuario/estado', authenticateToken, getUserStats);
+
 
 export default router;
  

@@ -13,7 +13,7 @@ export const getCategoryByIngredientName = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-import { PrismaClient } from '../generated/prisma/index.js';
+import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export const getIngredients = async (req, res) => {

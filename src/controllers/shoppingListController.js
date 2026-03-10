@@ -1,4 +1,5 @@
-import { PrismaClient } from '../generated/prisma/index.js';
+import { PrismaClient } from '@prisma/client';
+import { normalizeName } from '../utils/normalize.js';
 const prisma = new PrismaClient();
 
 export const getShoppingList = async (req, res) => {
@@ -80,7 +81,7 @@ export const addShoppingListItem = async (req, res) => {
     for (const item of shoppingList) {
       let ingredient = await prisma.ingredient.findFirst({
         where: {
-          name: item.ingredient,
+          name: normalizeName(item.ingredient),
           category: item.category
         }
       });
@@ -88,21 +89,21 @@ export const addShoppingListItem = async (req, res) => {
         try {
           ingredient = await prisma.ingredient.create({
             data: {
-              name: item.ingredient,
+              name: normalizeName(item.ingredient),
               category: item.category
             }
           });
-          console.info(`Ingrediente creado: ${item.ingredient} (${item.category})`);
-          results.push({ info: `Ingrediente creado: ${item.ingredient}` });
+          console.info(`Ingrediente creado: ${normalizeName(item.ingredient)} (${item.category})`);
+          results.push({ info: `Ingrediente creado: ${normalizeName(item.ingredient)}` });
         } catch (err) {
-          console.error(`No se pudo crear ${item.ingredient}: ${err.message}`);
-          results.push({ error: `No se pudo crear ${item.ingredient}: ${err.message}` });
+          console.error(`No se pudo crear ${normalizeName(item.ingredient)}: ${err.message}`);
+          results.push({ error: `No se pudo crear ${normalizeName(item.ingredient)}: ${err.message}` });
           continue;
         }
       }
       let shop = await prisma.shop.findFirst({
         where: {
-          name: item.shop,
+          name_normalized: normalizeName(item.shop),
           userId: req.user.id
         }
       });
@@ -111,6 +112,7 @@ export const addShoppingListItem = async (req, res) => {
         shop = await prisma.shop.create({
           data: {
             name: item.shop,
+            name_normalized: normalizeName(item.shop),
             userId: req.user.id
           }
         });
@@ -211,7 +213,7 @@ export const deleteShoppingListItem = async (req, res) => {
 
 export const updateBoughtStatus = async (req, res) => {
   const { id } = req.params;
-  const { bought } = req.body;
+  const { bought, purchaseDate, supermarket } = req.body;
 
   if (typeof bought !== 'boolean') {
     return res.status(400).json({ error: 'El estado comprado debe ser booleano.' });
@@ -247,12 +249,27 @@ export const updateBoughtStatus = async (req, res) => {
         data: {
           userId: item.userId,
           ingredientId: item.ingredientId,
-          category: item.ingredient.category
+          category: item.ingredient.category,
+          cantidad: item.cantidad || 1
         }
       });
       await prisma.shoppingList.update({
         where: { id: Number(id) },
-        data: { bought }
+        data: {
+          bought,
+          purchaseDate: purchaseDate ? new Date(purchaseDate) : new Date(),
+          shopId: supermarket || item.shopId
+        }
+      });
+      // Registrar en historial de compra
+      await prisma.purchaseHistory.create({
+        data: {
+          userId: item.userId,
+          ingredientId: item.ingredientId,
+          shopId: supermarket || item.shopId || null,
+          cantidad: item.cantidad || 1,
+          purchaseDate: purchaseDate ? new Date(purchaseDate) : new Date()
+        }
       });
       const items = await prisma.shoppingList.findMany({
         where: { userId: req.user.id },
@@ -274,38 +291,50 @@ export const updateBoughtStatus = async (req, res) => {
         });
       });
       const shoppingListGrouped = Array.from(shopMap.entries()).map(([shop, items]) => ({ shop, items }));
-      return res.json({ message: `${item.ingredient.name} marcado como comprado y añadido a la despensa.`, shoppingList: shoppingListGrouped });
+      return res.json({ message: `${item.ingredient.name} marcado como comprado, añadido a la despensa y registrado en historial.`, shoppingList: shoppingListGrouped });
     }
 
     await prisma.shoppingList.update({
       where: { id: Number(id) },
-      data: { bought }
-    });
-    const items = await prisma.shoppingList.findMany({
-      where: { userId: req.user.id },
-      include: {
-        ingredient: { select: { id: true, name: true, category: true } },
-        shop: { select: { id: true, name: true } }
+      data: {
+        bought,
+        purchaseDate: purchaseDate ? new Date(purchaseDate) : new Date(),
+        shopId: supermarket || item.shopId
       }
     });
-    const shopMap = new Map();
-    items.forEach(item => {
-      const shopKey = item.shop ? item.shop.name : 'Sin tienda';
-      if (!shopMap.has(shopKey)) shopMap.set(shopKey, []);
-      shopMap.get(shopKey).push({
-        id: item.id,
-        ingredientId: item.ingredient.id,
-        name: item.ingredient.name,
-        category: item.ingredient.category,
-        bought: item.bought || false
-      });
-    });
-    const shoppingListGrouped = Array.from(shopMap.entries()).map(([shop, items]) => ({ shop, items }));
-    return res.json({ message: `${item.ingredient.name} marcado como ${bought ? 'comprado' : 'pendiente'}.`, shoppingList: shoppingListGrouped });
-    
-
+    // ...existing code...
+    // El resto del código ya está dentro del try, así que solo cerramos el bloque correctamente
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
+
+// Endpoint para historial completo
+export const getShoppingHistory = async (req, res) => {
+  try {
+    const userId = Number(req.params.userId);
+    const history = await prisma.shoppingList.findMany({
+      where: {
+        userId,
+        bought: true
+      },
+      include: {
+        ingredient: true,
+        shop: true
+      },
+      orderBy: { purchaseDate: 'desc' }
+    });
+    // Estructura optimizada
+    const result = history.map(item => ({
+      ingredientName: item.ingredient.name,
+      quantity: item.cantidad || 1,
+      purchaseDate: item.purchaseDate,
+      supermarket: item.shop ? item.shop.name : null
+    }));
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al obtener el historial de compras', details: error.message });
+  }
+};
+
 

@@ -5,7 +5,7 @@ if (process.env.NODE_ENV !== 'production') {
 console.log('DEBUG JWT_SECRET:', process.env.JWT_SECRET);
 
 import express from 'express';
-import { PrismaClient } from './generated/prisma/index.js';
+import { PrismaClient } from '@prisma/client';
 import userRoutes from './routes/userRoutes.js';
 import dietRestrictionsRoutes from './routes/dietRestrictionsRoutes.js';
 import dietPreferencesRoutes from './routes/dietPreferencesRoutes.js';
@@ -15,6 +15,8 @@ import recipeRoutes from './routes/recipeRoutes.js';
 import scannerRoutes from './routes/scannerRoutes.js';
 import shoppingListRoutes from './routes/shoppingListRoutes.js';
 import myShopsRoutes from './routes/myShopsRoutes.js';
+import purchaseHistoryRoutes from './routes/purchaseHistoryRoutes.js';
+import combinedShopsRoutes from './routes/combinedShopsRoutes.js';
 import cors from 'cors';
 import enumRoutes from './routes/enumRoutes.js';
 
@@ -25,7 +27,7 @@ const app = express();
 
 app.use(cors({
   origin: process.env.CORS_ORIGINS.split(','),
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
 }));
@@ -38,6 +40,8 @@ app.use('/api/usuario/preferencias', dietPreferencesRoutes);
 app.use('/api/pantry', pantryRoutes);
 app.use('/api/ingredients', ingredientRoutes);
 app.use('/api/recipes', recipeRoutes);
+app.use('/api', purchaseHistoryRoutes);
+app.use('/api', combinedShopsRoutes);
 app.use('/api/recipe-detail', recipeDetailRoutes);
 app.use('/api/scanner', scannerRoutes);
 app.use('/api', shoppingListRoutes);

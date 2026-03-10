@@ -1,3 +1,27 @@
+model shop {
+  id     Int    @id @default(autoincrement())
+  name   String
+  name_normalized String?
+  userId Int
+  user   user   @relation(fields: [userId], references: [id])
+  shoppingList shoppingList[]
+  purchaseHistory purchaseHistory[]
+  @@unique([userId, name_normalized])
+}
+model purchaseHistory {
+  id           Int        @id @default(autoincrement())
+  userId       Int
+  ingredientId Int
+  shopId       Int?
+  quantity     Float
+  purchaseDate DateTime   @default(now())
+  user         user       @relation(fields: [userId], references: [id])
+  ingredient   ingredient @relation(fields: [ingredientId], references: [id])
+  shop         shop?      @relation(fields: [shopId], references: [id])
+  @@index([userId])
+  @@index([ingredientId])
+  @@index([shopId])
+}
 generator client {
   provider = "prisma-client-js"
   binaryTargets = ["native", "debian-openssl-3.0.x"]
@@ -8,11 +32,6 @@ datasource db {
   url = env("DATABASE_URL")
 }
 
-enum ingredient_priority {
-  alta
-  media
-  baja
-}
 
 model ingredient {
   id       Int                  @id @default(autoincrement())
@@ -20,16 +39,17 @@ model ingredient {
   category ingredient_category?
   pantry   pantry[]
   shoppingList shoppingList[]
-  ingredients RecipeIngredient[]
+  purchaseHistory purchaseHistory[]
 }
 
 model pantry {
   id           Int        @id @default(autoincrement())
   userId       Int
   ingredientId Int
-    ingredient   ingredient @relation(fields: [ingredientId], references: [id], map: "Pantry_ingredientId_rel")
-    user         user       @relation(fields: [userId], references: [id], map: "Pantry_userId_rel")
-  category     ingredient_category?
+  quantity     Float?     // Nueva cantidad
+  ingredient   ingredient @relation(fields: [ingredientId], references: [id], map: "Pantry_ingredientId_rel")
+  user         user       @relation(fields: [userId], references: [id], map: "Pantry_userId_rel")
+  // category     ingredient_category? // Eliminado, usar siempre el de ingredient
 
   @@index([ingredientId], map: "Pantry_ingredientId_fkey")
   @@index([userId], map: "Pantry_userId_fkey")
@@ -42,11 +62,10 @@ model user {
   password     String
   refreshToken String?
   pantry       pantry[]
-  shops        shop[]
   shoppingList shoppingList[]
   avatar       String? 
-  stats        Json?   
-  settings     Json?   
+  shops        shop[]
+  purchaseHistory purchaseHistory[]
   dietRestrictions diet_restriction[]
   dietPreferences diet_preference[]
 }
@@ -98,15 +117,7 @@ enum ingredient_category {
   snacks_extras
 }
 
-model shop {
-  id     Int    @id @default(autoincrement())
-  name   String
-  name_normalized String?
-  userId Int
-  user   user   @relation(fields: [userId], references: [id])
-  shoppingList shoppingList[]
-  @@unique([userId, name_normalized])
-}
+
 
 model shoppingList {
   id           Int        @id @default(autoincrement())
@@ -114,6 +125,8 @@ model shoppingList {
   ingredientId Int
   shopId       Int?
   bought       Boolean?   @default(false)
+  quantity     Float?     
+  purchaseDate DateTime?  
   user         user       @relation(fields: [userId], references: [id])
   ingredient   ingredient @relation(fields: [ingredientId], references: [id])
   shop         shop?      @relation(fields: [shopId], references: [id])
@@ -123,28 +136,6 @@ model shoppingList {
   @@unique([userId, ingredientId])
 }
 
-model Recipe {
-  id                Int                @id @default(autoincrement())
-  name              String
-  description       String?
-  preparationSteps  String[]           
-  preparationTime   Int?               
-  dietRestrictions  diet_restriction[] 
-  dietPreferences   diet_preference[]  
-  nutritionInfo     Json?              
-  createdAt         DateTime           @default(now())
-  updatedAt         DateTime           @updatedAt
-  ingredients       RecipeIngredient[]
-}
 
-model RecipeIngredient {
-  id           Int        @id @default(autoincrement())
-  recipeId     Int
-  ingredientId Int
-  quantity     Float?     
-  unit         String?    
-  recipe       Recipe     @relation(fields: [recipeId], references: [id])
-  ingredient   ingredient @relation(fields: [ingredientId], references: [id])
-  @@unique([recipeId, ingredientId])
-}
+
 
