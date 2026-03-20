@@ -7,6 +7,7 @@ console.log('DEBUG JWT_SECRET:', process.env.JWT_SECRET);
 import express from 'express';
 import { PrismaClient } from '@prisma/client';
 import userRoutes from './routes/userRoutes.js';
+import historialRoutes from './routes/historialRoutes.js';
 import dietRestrictionsRoutes from './routes/dietRestrictionsRoutes.js';
 import dietPreferencesRoutes from './routes/dietPreferencesRoutes.js';
 import pantryRoutes from './routes/pantryRoutes.js';
@@ -35,6 +36,7 @@ app.use(cors({
 app.use(express.json());
 
 app.use('/api', userRoutes); 
+app.use('/api/historial', historialRoutes);
 app.use('/api/usuario/restricciones', dietRestrictionsRoutes);
 app.use('/api/usuario/preferencias', dietPreferencesRoutes);
 app.use('/api/pantry', pantryRoutes);
