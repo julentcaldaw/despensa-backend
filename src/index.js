@@ -34,7 +34,7 @@ app.use(cors({
 
 app.use(express.json());
 
-app.use('/api', userRoutes);
+app.use('/api', userRoutes); 
 app.use('/api/usuario/restricciones', dietRestrictionsRoutes);
 app.use('/api/usuario/preferencias', dietPreferencesRoutes);
 app.use('/api/pantry', pantryRoutes);
