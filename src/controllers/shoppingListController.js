@@ -249,8 +249,7 @@ export const updateBoughtStatus = async (req, res) => {
         data: {
           userId: item.userId,
           ingredientId: item.ingredientId,
-          category: item.ingredient.category,
-          cantidad: item.cantidad || 1
+          quantity: item.cantidad || 1
         }
       });
       await prisma.shoppingList.update({
