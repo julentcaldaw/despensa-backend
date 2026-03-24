@@ -8,6 +8,7 @@ model shop {
   purchaseHistory purchaseHistory[]
   @@unique([userId, name_normalized])
 }
+
 model purchaseHistory {
   id           Int        @id @default(autoincrement())
   userId       Int
@@ -32,7 +33,6 @@ datasource db {
   url = env("DATABASE_URL")
 }
 
-
 model ingredient {
   id       Int                  @id @default(autoincrement())
   name     String
@@ -49,7 +49,6 @@ model pantry {
   quantity     Float?     // Nueva cantidad
   ingredient   ingredient @relation(fields: [ingredientId], references: [id], map: "Pantry_ingredientId_rel")
   user         user       @relation(fields: [userId], references: [id], map: "Pantry_userId_rel")
-  // category     ingredient_category? // Eliminado, usar siempre el de ingredient
 
   @@index([ingredientId], map: "Pantry_ingredientId_fkey")
   @@index([userId], map: "Pantry_userId_fkey")
